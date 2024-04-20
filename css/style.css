@@ -1,0 +1,84 @@
+@font-face {
+  font-family: "Montserrat";
+  src: url(font/montserrat-variable.ttf);
+}
+
+:root {
+  color-scheme: dark;
+}
+
+body {
+  min-height: 100vh;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  color: hsl(0, 0%, 95%);
+  font-family: "Montserrat", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+}
+
+:focus {
+  outline: solid 0.2em white;
+  box-shadow: 0 0 0 0.4em black;
+}
+
+*:is(:disabled, [disabled]) {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* input checkbox */
+
+input[type="checkbox"] {
+  position: relative;
+  appearance: none;
+  width: 2em;
+  height: 2em;
+  border-radius: 0.25em;
+  /* background: url("../img/unchecked.png") no-repeat; */
+  background-color: #283030;
+  border: solid 0.1em #919595;
+  overflow: hidden;
+}
+
+input[type="checkbox"]:before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: url("../img/checked.png") no-repeat;
+  opacity: 0;
+  clip-path: polygon(0 0, 0% 0%, 0% 100%, 0 100%);
+  transition: opacity 0.5s ease-out, clip-path 0s ease-out 0.5s;
+}
+
+input[type="checkbox"]:checked:before {
+  opacity: 1;
+  animation: 0.5s checked ease-out;
+  clip-path: polygon(0 0, 100% 0%, 100% 100%, 0 100%);
+  transition: opacity 0.2s ease-out, clip-path 0.5s ease-out;
+}
+
+input[type="checkbox"],
+input[type="checkbox"]:before {
+  background-size: cover;
+  /* image-rendering: pixelated; */
+}
+
+/* input text */
+input[type="text"],
+textarea {
+  border-radius: 0.5em;
+  font-size: 1rem;
+  padding: 0.2em 0.2em;
+  background-color: hsla(0, 0%, 0%, 0.2);
+  border: 0.1em solid hsla(0, 0%, 100%, 0.3);
+  width: 100%;
+}
+
+[data-user-dont-select] {
+  user-select: none;
+}

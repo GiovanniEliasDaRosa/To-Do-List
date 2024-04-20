@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>To Do List</title>
+    <link rel="shortcut icon" href="favicon.png" type="image/x-icon" />
+
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/buttons.css" />
+    <link rel="stylesheet" href="css/menu.css" />
+    <link rel="stylesheet" href="css/list.css" />
+    <link rel="stylesheet" href="css/items.css" />
+    <link rel="stylesheet" href="css/icons.css" />
+    <link rel="stylesheet" href="css/screens.css" />
+    <link rel="stylesheet" href="css/configlists.css" />
+    <link rel="stylesheet" href="css/configcurrentlist.css" />
+    <link rel="stylesheet" href="css/addnewlistmenu.css" />
+
+    <script src="js/functions.js" defer></script>
+    <script src="js/eventmanager.js" defer></script>
+    <script src="js/routes.js" defer></script>
+    <script src="js/main.js" defer></script>
+  </head>
+  <body>
+    <div id="menu">
+      <h1>To Do</h1>
+      <p id="subtitle">Lists</p>
+
+      <div id="cards">
+        <button class="card icons nomargin plus" id="addNewListButton">
+          <p>Add new list</p>
+        </button>
+      </div>
+
+      <button class="icons nomargin gear" id="openConfigLists" title="open config menu"></button>
+    </div>
+
+    <div id="list">
+      <div id="list__title">
+        <button class="icons nomargin square bars" id="openSideBar"></button>
+        <h1 id="list__title__h1">List: <span id="list__name">[]</span></h1>
+      </div>
+
+      <div id="list__items">
+        <div id="addNewItem">
+          <input id="addNewItem__input" type="text" placeholder="Item name goes here" />
+          <button id="addNewItem__button" class="icons plus">Add</button>
+        </div>
+      </div>
+
+      <div id="lists__sidebar">
+        <button class="lists__sidebar__items icons nomargin xmark" id="closeSideBar"></button>
+        <a
+          href="#"
+          class="buttons lists__sidebar__items square icons nomargin home"
+          id="gotomenubutton"
+        ></a>
+
+        <button
+          class="lists__sidebar__items icons nomargin gear"
+          id="openConfigCurrentList"
+          title="open config menu"
+        ></button>
+      </div>
+      <div id="lists__sidebar__dark"></div>
+    </div>
+
+    <div id="progressbar">
+      <div id="progressbar__fill"></div>
+      <span id="progressbar__number">0%</span>
+    </div>
+
+    <template id="cardTemplate">
+      <a class="buttons card" href="#Daily List">
+        <p class="card__title">TITLE</p>
+        <p class="card__description">
+          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Vero animi quis sed nostrum
+          aperiam?
+        </p>
+        <p class="card__editTime">Edited in: DD/MM/YYYY | hh:mm:ss</p>
+        <p class="card__lastEdit">Last Edit: Undefined</p>
+      </a>
+    </template>
+
+    <template id="itemTemplate">
+      <div class="item" data-id="0">
+        <p class="item__dragabblebutton icons nomargin grip"></p>
+        <input class="item__checkbox" type="checkbox" name="undefined" id="undefined" />
+        <label class="item__label" for="undefined">Undefined ERROR</label>
+        <input
+          class="item__input"
+          type="text"
+          style="display: none"
+          disabled
+          aria-disabled="true"
+        />
+        <div class="item__actions">
+          <button class="item__edit square icons nomargin pencil"></button>
+          <button class="item__delete square icons nomargin trash"></button>
+          <button class="item__moveup square icons nomargin up"></button>
+          <button class="item__movedown square icons nomargin down"></button>
+        </div>
+      </div>
+    </template>
+
+    <template id="configMenuLists__itemTemplate">
+      <div class="cards__config" data-id="none">
+        <p class="cards__config__title">[]</p>
+        <button class="cards__config__deleteButton warn icons nomargin trash square"></button>
+      </div>
+    </template>
+
+    <div id="configListsMenu" class="screen">
+      <div id="configMenuDiv" class="screen__div">
+        <h1>Configurations</h1>
+
+        <div class="screen__div__cards" id="configMenuLists"></div>
+
+        <div class="screen__div__actions">
+          <div class="screen__div__actions__left">
+            <button disabled>Import</button>
+            <button disabled>Export</button>
+          </div>
+          <div class="screen__div__actions__right">
+            <button class="screen__div__actions__close onlyoone">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="addNewListMenu" class="screen">
+      <div id="addNewListMenuDiv" class="screen__div">
+        <h1>Create new list</h1>
+
+        <div class="screen__div__cards">
+          <label for="addNewListMenu__name" class="screen__div__namelabel"
+            >List name:
+            <span class="screen__div__tip">TIP: Recommended max 28 characters</span></label
+          >
+          <input
+            id="addNewListMenu__name"
+            class="screen__div__name"
+            type="text"
+            placeholder="Name"
+          />
+          <label for="addNewListMenu__description">List description: </label>
+          <textarea
+            id="addNewListMenu__description"
+            class="screen__div__textarea"
+            name="addNewListMenu__description"
+            rows="3"
+            placeholder="Description"
+          ></textarea>
+        </div>
+
+        <div class="screen__div__actions">
+          <div class="screen__div__actions__left">
+            <p class="screen__div__tip">
+              <strong>TIP</strong>: You can import data after creating the list
+            </p>
+          </div>
+          <div class="screen__div__actions__right flex">
+            <button class="screen__div__actions__close">Cancel</button>
+            <button id="configMenu__CreateButton">Create</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="configCurrentListMenu" class="screen">
+      <div id="configureListMenuDiv" class="screen__div">
+        <h1>Edit list</h1>
+
+        <div class="screen__div__cards">
+          <label for="configureListMenuDiv__name" class="screen__div__namelabel"
+            >List name:
+            <span class="screen__div__tip">TIP: Recommended max 28 characters</span></label
+          >
+          <input
+            id="configureListMenuDiv__name"
+            class="screen__div__name"
+            type="text"
+            placeholder="Name"
+          />
+          <label for="configureListMenuDiv__description">List description: </label>
+          <textarea
+            id="configureListMenuDiv__description"
+            class="screen__div__textarea"
+            name="configureListMenuDiv__description"
+            rows="3"
+            placeholder="Description"
+          ></textarea>
+        </div>
+
+        <div class="screen__div__actions">
+          <div class="screen__div__actions__left">
+            <button disabled>Import</button>
+            <button disabled>Export</button>
+          </div>
+          <div class="screen__div__actions__right flex">
+            <button class="screen__div__actions__close">Cancel</button>
+            <button id="configureListMenuDiv__SaveButton">Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

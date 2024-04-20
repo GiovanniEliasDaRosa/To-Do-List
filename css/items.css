@@ -1,0 +1,143 @@
+/*
+itemDiv 
+  - item
+    - checkbox
+    - label
+    - input
+    - ...
+*/
+
+/* .itemDiv {
+  display: grid;
+  grid-template-columns: 1fr;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5em;
+  width: 100%;
+} */
+
+.item {
+  padding: 0.25em;
+  border-radius: 0.5em;
+  border: solid 0.1em hsla(0, 0%, 100%, 0.05);
+
+  display: grid;
+  grid-template-columns: auto auto 1fr auto;
+  gap: 0.5em;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.animatedrop:not(.preview) {
+  animation: 1s DropItem ease-out forwards;
+}
+
+@keyframes DropItem {
+  0% {
+    transform: translateY(-0.5em);
+  }
+  30% {
+    box-shadow: 0 0 0 0.1em hsla(0, 0%, 100%, 0.1);
+  }
+  50% {
+    transform: translateY(0);
+    box-shadow: 0 0 0 0.1em hsla(0, 0%, 100%, 0.4);
+  }
+  100% {
+    box-shadow: 0 0 0.1em 0.4em hsla(0, 0%, 100%, 0);
+  }
+}
+
+/* .itemDiv:is(:hover, :focus-within) .item { */
+.item:is(:hover, :focus-within) .item {
+  border-color: hsla(0, 0%, 100%, 0.2);
+}
+
+.itemDiv[data-editing] .item {
+  border-color: hsla(0, 0%, 100%, 0.5);
+  box-shadow: 0 0.5em 1em -0.5em #46993a;
+}
+
+/* .itemDiv:is(:hover, :focus-within) .item__actions { */
+.item:is(:hover, :focus-within) .item__actions {
+  opacity: 1;
+  pointer-events: all;
+}
+
+/* drag button */
+.item__dragabblebutton {
+  width: 1em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: grab;
+}
+
+.item:has(> .item__checkbox:checked) .item__label {
+  text-decoration: line-through;
+  color: hsla(0, 0%, 100%, 0.6);
+  animation: 0.5s checkit 0.5s forwards;
+}
+
+/* label & input */
+.item__label {
+  transition: 1s ease-out;
+}
+
+.item__label,
+.item__input {
+  font-size: 1rem;
+  padding: 0.2em 0.2em;
+  border: 0.1em solid transparent;
+}
+
+/* .item__input {
+  height: 100%;
+  border-radius: 0.5em;
+  background-color: hsla(0, 0%, 0%, 0.5);
+  border: 0.1em solid hsla(0, 0%, 100%, 0.3);
+} */
+
+/* addNewItem */
+#addNewItem {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  width: 100%;
+  gap: 0.5em;
+}
+
+#addNewItem input {
+  padding-left: 0.5em;
+}
+
+/* other buttons */
+.item__actions {
+  display: flex;
+  gap: 0.5em;
+  opacity: 0;
+  transition: 0.2s ease-out;
+  pointer-events: none;
+}
+
+/**/
+.dragging {
+  box-shadow: 0 0 0 0.2em white;
+  opacity: 0;
+}
+
+.preview {
+  position: absolute;
+  left: 0;
+  top: 0;
+  background-color: hsla(0, 0%, 100%, 0.1);
+  box-shadow: 0 0 0 0.1em hsla(0, 0%, 100%, 0.1), 0 0 0.5em 0.1em hsla(0, 0%, 0%, 0.2);
+  width: min(40em, calc(100% - 1em));
+  pointer-events: none;
+}
+
+/* .preview.cant {
+  background-color: hsla(0, 100%, 50%, 0.5);
+  box-shadow: 0 0 0 0.1em hsla(0, 100%, 50%, 0.5);
+  transition: all 0.5s linear, left 0s, top 0s;
+} */

@@ -1,0 +1,131 @@
+.screen {
+  position: fixed;
+  inset: 0;
+  background-color: hsla(0, 0%, 0%, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.screen__div {
+  padding: 1em;
+  background-color: hsl(228, 17%, 6%);
+  border-radius: 0.5em;
+  border: solid 0.1em hsla(0, 0%, 100%, 0.2);
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  max-height: 100vh;
+  max-height: 100dvh;
+  gap: 0.5em;
+  width: clamp(min(12em, 100vw), 30em, 100vw);
+}
+
+.animateIn {
+  animation: animateIn 1s cubic-bezier(0.2, 0.9, 0.5, 1.1) forwards;
+}
+
+.animateOut {
+  animation: animateOut 1s cubic-bezier(0.2, 0.9, 0.5, 1.1) forwards;
+}
+
+@keyframes animateIn {
+  0% {
+    transform: translateY(100%) scale(0.5);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0%) scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes animateOut {
+  0% {
+    transform: translateY(0%) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100%) scale(0.5);
+    opacity: 0;
+  }
+}
+
+/* Responsives */
+@media (max-width: 550px) {
+  .screen__div {
+    height: 100vh;
+    height: 100dvh;
+    width: 100vh;
+  }
+}
+
+.screen__div__cards {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+
+  padding-block: 1em;
+  min-height: 12em;
+  overflow: auto;
+
+  border-top: solid 0.1em hsla(0, 0%, 100%, 0.2);
+  border-bottom: solid 0.1em hsla(0, 0%, 100%, 0.2);
+}
+
+.screen__div__actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5em;
+}
+
+.screen__div__namelabel {
+  display: flex;
+  justify-content: space-between;
+}
+
+.screen__div__name,
+.screen__div__textarea {
+  width: 100%;
+}
+
+.screen__div__textarea {
+  resize: vertical;
+}
+
+.screen__div__actions__right.flex {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5em;
+}
+
+@media (max-width: 450px) {
+  .screen__div__actions {
+    justify-content: space-between;
+    flex-direction: column;
+  }
+  .screen__div__actions__left,
+  .screen__div__actions__right {
+    display: flex;
+    gap: 0.5em;
+  }
+
+  .screen__div__actions button {
+    flex: 0 0 calc(50% - 0.5em / 2);
+  }
+
+  .screen__div__actions button.onlyoone {
+    flex: 0 0 100%;
+  }
+
+  .screen__div__namelabel {
+    flex-direction: column;
+    gap: 0.5em;
+  }
+}
+
+.screen__div__tip {
+  color: hsl(0, 0%, 80%);
+}
+
+/* screen__div__actions__left */
+/* screen__div__actions__right */
