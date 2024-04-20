@@ -156,6 +156,13 @@ if (isMobile) {
   });
 
   window.addEventListener("touchend", (e) => {
+    if (document.querySelector(".item.dragging") != null) {
+      // we were just dragging an item just now
+      console.log("we were just dragging an item just now");
+      BodyTouchend(e);
+      return;
+    }
+
     EndTouching(e.changedTouches[0].clientX, e.changedTouches[0].target.id);
   });
 } else {
@@ -169,10 +176,21 @@ if (isMobile) {
 }
 
 function StartTouching(x, target, e) {
+  console.log("StartTouching()");
+
   if (listId == null) return;
 
   if (target != null) {
     if (target.classList[0] == "item__dragabblebutton") {
+      if (isMobile) {
+        console.warn("STARTTOUCHING");
+        const item = target.parentElement;
+        const pos = Number(item.dataset.id);
+        StartDragging(item, e, e.touches[0].clientX, e.touches[0].clientY);
+        document.body.style.overflow = "hidden";
+
+        window.addEventListener("touchmove", BodyTouchmove);
+      }
       return;
     }
   }
@@ -192,8 +210,13 @@ function StartTouching(x, target, e) {
 }
 
 function EndTouching(x, target) {
+  console.log("EndTouching()");
+
   if (listId == null) return;
-  if (document.querySelector(".item.dragging") != null) return;
+
+  if (document.querySelector(".item.dragging") != null) {
+    return;
+  }
 
   sideBarPosX = x;
 
@@ -215,7 +238,7 @@ function EndTouching(x, target) {
 
   if (target == "openSideBar") {
     calc = -100;
-  } else if (target == "openSideBar") {
+  } else if (target == "closeSideBar") {
     calc = 0;
   }
 
@@ -223,12 +246,12 @@ function EndTouching(x, target) {
   lists__sidebar__dark.style.opacity = calc / 100 + 1;
 
   if (target == "openSideBar") {
-    Enable(lists__sidebar);
-    Enable(lists__sidebar__dark);
+    // Enable(lists__sidebar);
+    // Enable(lists__sidebar__dark);
     calc = 0;
     sideBarIsOpen = true;
     disable = false;
-  } else if (target == "openSideBar") {
+  } else if (target == "closeSideBar") {
     calc = -100;
     sideBarIsOpen = false;
     disable = true;
@@ -252,11 +275,6 @@ function EndTouching(x, target) {
     startSideBarPosX = 0;
   }, 200);
 
-  // last update
-
-  // if cancel
-  // Disable(lists__sidebar);
-  // Disable(lists__sidebar__dark);
   if (isMobile) {
     window.removeEventListener("touchmove", TouchMoved);
   } else {
@@ -265,6 +283,7 @@ function EndTouching(x, target) {
 }
 
 function MouseMoved(e) {
+  console.log("MouseMoved()");
   sideBarPosX = e.clientX;
 
   let difference = sideBarPosX - startSideBarPosX;
@@ -278,6 +297,7 @@ function MouseMoved(e) {
 }
 
 function TouchMoved(e) {
+  console.log("TouchMoved()");
   sideBarPosX = e.changedTouches[0].clientX;
 
   let difference = sideBarPosX - startSideBarPosX;
@@ -291,6 +311,7 @@ function TouchMoved(e) {
 }
 
 function UpdateSideBar() {
+  console.log("UpdateSideBar()");
   // lists__sidebar__dark
   let difference = sideBarPosX - 20 - startSideBarPosX;
   let calc = 0;
@@ -313,3 +334,17 @@ Disable(configListsMenu);
 Disable(configCurrentListMenu);
 Disable(lists__sidebar);
 Disable(lists__sidebar__dark);
+
+openSideBar.addEventListener("click", () => {
+  Enable(lists__sidebar);
+  Enable(lists__sidebar__dark);
+  EndTouching(0, "openSideBar");
+
+  closeSideBar.focus();
+});
+
+closeSideBar.addEventListener("click", () => {
+  EndTouching(0, "closeSideBar");
+
+  openSideBar.focus();
+});

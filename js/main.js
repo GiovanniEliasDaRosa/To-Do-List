@@ -179,6 +179,27 @@ function CreateNewItem(content, checked, pos) {
   item__label.textContent = content;
   item__input.value = content;
 
+  if (!isMobile) {
+    // item__dragabblebutton.addEventListener("touchstart", (e) => {
+    //   let touch = e.touches[0];
+    //   StartDragging(item, e, touch.clientX, touch.clientY);
+    //   document.body.style.overflow = "hidden";
+    //   document.body.addEventListener("touchmove", BodyTouchmove(item, e, pos));
+    //   document.body.addEventListener("touchend", BodyTouchend(item, e, pos));
+    // });
+    item.addEventListener("dragstart", (e) => {
+      StartDragging(item, e, e.clientX, e.clientY);
+    });
+
+    item.addEventListener("drag", (e) => {
+      Dragging(item, e.clientY, pos);
+    });
+
+    item.addEventListener("dragend", (e) => {
+      EndDragging(item, e.clientY, pos);
+    });
+  }
+
   item__edit.addEventListener("click", () => {
     EditItem(item);
 
@@ -220,27 +241,35 @@ function CreateNewItem(content, checked, pos) {
     UpdateProgressBar();
   });
 
-  item__moveup.addEventListener("click", () => {
-    if (pos == 0) return;
+  if (pos == 0) {
+    Disable(item__moveup, false);
+  } else {
+    item__moveup.addEventListener("click", () => {
+      if (pos == 0) return;
 
-    console.log(pos);
-    let temp = lists[listId].items[pos - 1];
-    lists[listId].items[pos - 1] = lists[listId].items[pos];
-    lists[listId].items[pos] = temp;
-    SaveData();
-    ShowList();
-  });
+      console.log(pos);
+      let temp = lists[listId].items[pos - 1];
+      lists[listId].items[pos - 1] = lists[listId].items[pos];
+      lists[listId].items[pos] = temp;
+      SaveData();
+      ShowList();
+    });
+  }
 
-  item__movedown.addEventListener("click", () => {
-    if (pos >= lists[listId].items.length - 1) return;
+  if (pos == lists[listId].items.length - 1) {
+    Disable(item__movedown, false);
+  } else {
+    item__movedown.addEventListener("click", () => {
+      if (pos >= lists[listId].items.length - 1) return;
 
-    console.log(pos);
-    let temp = lists[listId].items[pos + 1];
-    lists[listId].items[pos + 1] = lists[listId].items[pos];
-    lists[listId].items[pos] = temp;
-    SaveData();
-    ShowList();
-  });
+      console.log(pos);
+      let temp = lists[listId].items[pos + 1];
+      lists[listId].items[pos + 1] = lists[listId].items[pos];
+      lists[listId].items[pos] = temp;
+      SaveData();
+      ShowList();
+    });
+  }
 
   list__items.insertBefore(item, addNewItem);
 
@@ -365,4 +394,164 @@ function UpdateProgressBar() {
   }
 
   currentPercentage = percentage;
+}
+
+/* item functions */
+function StartDragging(item, e, clientX, clientY) {
+  console.log("StartDragging");
+  let x = clientX;
+  let y = clientY;
+  const frompoint = document.elementFromPoint(x, y);
+
+  if (frompoint.classList[0] != "item__dragabblebutton") {
+    e.preventDefault();
+    return;
+  }
+
+  // console.log("currentPreviewItem", currentPreviewItem);
+  if (currentPreviewItem == null) {
+    // console.log(
+    //   "%cCHANGE currentPreviewItem",
+    //   "padding: 0.5em; background: hsla(0, 100%, 50%, 0.2)"
+    // );
+    currentPreviewItem = item.cloneNode(true);
+  }
+
+  let itemBounds = item.getBoundingClientRect();
+  bound.x = itemBounds.x;
+  bound.y = itemBounds.y;
+  diff.x = x - bound.x;
+  diff.y = y - bound.y;
+
+  currentPreviewItem.classList.add("preview");
+  currentPreviewItem.style.left = `${bound.x}px`;
+  currentPreviewItem.style.top = `${bound.y}px`;
+
+  document.body.appendChild(currentPreviewItem);
+
+  item.classList.add("dragging");
+}
+
+function Dragging(item, clientY, pos) {
+  // console.log(`Dragging(item, ${clientY}, ${pos})`);
+
+  let x = bound.x;
+  let y = clientY - diff.y;
+
+  if (clientY == 0) {
+    y = -128;
+  }
+
+  currentPreviewItem.style.left = `${x}px`;
+  currentPreviewItem.style.top = `${y}px`;
+
+  const frompoint = document.elementFromPoint(x, clientY);
+
+  if (frompoint == null || frompoint.classList[0] != "item") {
+    // console.log("%cNONE FOUND", "padding: 0.5em; background: hsla(0, 100%, 50%, 0.2)");
+    return;
+  }
+
+  let wantedpos = Number(frompoint.dataset.id);
+
+  if (pos == wantedpos) return;
+
+  let positem = Number(list__items.children[pos].dataset.id);
+  let wantedpositem = Number(list__items.children[wantedpos].dataset.id);
+
+  // console.log(pos, wantedpos);
+  // console.log(positem, wantedpositem);
+
+  if (positem > wantedpositem) {
+    list__items.insertBefore(item, frompoint);
+  } else if (positem < wantedpositem) {
+    list__items.insertBefore(frompoint, item);
+  }
+}
+
+function EndDragging(item, clientY, pos) {
+  let save = true;
+  console.log("EndDragging");
+  item.classList.remove("dragging");
+
+  let x = bound.x;
+  const frompoint = document.elementFromPoint(x, clientY);
+  if (frompoint == null || frompoint.classList[0] != "item") save = false;
+
+  let wantedpos = null;
+
+  let y = clientY - diff.y;
+  currentPreviewItem.style.left = `${x}px`;
+  currentPreviewItem.style.top = `${y}px`;
+
+  bound.x = 0;
+  bound.y = 0;
+  diff.x = 0;
+  diff.y = 0;
+
+  let test = [...list__items.children];
+
+  for (let i = 0; i < test.length - 1; i++) {
+    const child = test[i];
+
+    if (child == item) wantedpos = i;
+
+    child.setAttribute("data-id", i);
+    let checkbox = child.querySelector(".item__checkbox").checked;
+    let label = child.querySelector(".item__label").textContent;
+    lists[listId].items[i] = [label, checkbox];
+  }
+
+  if (save) {
+    SaveData();
+    ShowList();
+  }
+
+  let changed = [...list__items.children][wantedpos];
+  let wantedY = changed.getBoundingClientRect().y;
+  changed.classList.add("animatedrop");
+
+  currentPreviewItem.style.transition = "top 0.5s ease-out, opacity 0.5s ease-out 0.5s";
+
+  let dragabblebuttons = [...list__items.querySelectorAll(".item__dragabblebutton")];
+  dragabblebuttons.forEach((drag) => {
+    Disable(drag, false);
+  });
+
+  setTimeout(() => {
+    currentPreviewItem.style.top = `${wantedY}px`;
+    currentPreviewItem.style.opacity = "0";
+  }, 100);
+
+  setTimeout(() => {
+    changed.classList.remove("animatedrop");
+
+    currentPreviewItem.remove();
+    currentPreviewItem = null;
+
+    dragabblebuttons.forEach((drag) => {
+      Enable(drag, false);
+    });
+  }, 1100);
+}
+
+/* body functions */
+function BodyTouchmove(e) {
+  // console.log("BodyTouchmove", e);
+  const item = e.touches[0].target.parentElement;
+  const pos = Number(item.dataset.id);
+
+  Dragging(item, e.touches[0].clientY, pos);
+}
+
+function BodyTouchend(e) {
+  // console.log("BodyTouchend", e);
+  let hangedTouches = e.changedTouches[0];
+  const item = hangedTouches.target.parentElement;
+  const pos = Number(item.dataset.id);
+
+  EndDragging(item, hangedTouches.clientY, pos);
+  document.body.style.overflow = "";
+
+  window.removeEventListener("touchmove", BodyTouchmove);
 }

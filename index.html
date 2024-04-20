@@ -44,8 +44,8 @@
 
       <div id="list__items">
         <div id="addNewItem">
-          <input id="addNewItem__input" type="text" placeholder="Item name goes here" />
-          <button id="addNewItem__button" class="icons plus">Add</button>
+          <input id="addNewItem__input" type="text" placeholder="Item name" />
+          <button id="addNewItem__button" class="icons nomargin plus" title="Add new item"></button>
         </div>
       </div>
 
@@ -84,13 +84,14 @@
     </template>
 
     <template id="itemTemplate">
-      <div class="item" data-id="0">
+      <div class="item" data-id="0" draggable="true">
         <p class="item__dragabblebutton icons nomargin grip"></p>
         <input class="item__checkbox" type="checkbox" name="undefined" id="undefined" />
         <label class="item__label" for="undefined">Undefined ERROR</label>
         <input
           class="item__input"
           type="text"
+          name="iteminput"
           style="display: none"
           disabled
           aria-disabled="true"
