@@ -79,7 +79,7 @@ function Format(now, saved, complete, typeadd) {
   let difference = now - saved;
   if (difference != 0) {
     if (difference < 0) {
-      difference += typeadd;
+      difference += typeadd / 2;
     }
 
     return `${difference}${complete}${difference > 1 ? "s" : ""} `;

@@ -20,6 +20,11 @@
   width: clamp(min(12em, 100vw), 30em, 100vw);
 }
 
+.screen__div :is(input[type="text"], textarea) {
+  width: calc(100% - 0.2em);
+  align-self: center;
+}
+
 .animateIn {
   animation: animateIn 1s cubic-bezier(0.2, 0.9, 0.5, 1.1) forwards;
 }

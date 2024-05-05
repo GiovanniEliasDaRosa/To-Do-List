@@ -31,6 +31,20 @@
 }
 
 /* progressbar */
+#progressbar__div {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 8em;
+  padding: 0.5em;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  background: linear-gradient(0deg, hsl(0, 2%, 6%), hsla(0, 2%, 6%, 0));
+  /* background-color: hsl(0, 2%, 6%); */
+}
+
 #progressbar {
   height: 1.5em;
   width: min(30em, calc(100vw - 3rem));
@@ -39,10 +53,11 @@
   overflow: hidden;
   border-radius: 0.5em;
 
-  position: fixed;
-  left: 50%;
-  bottom: 1rem;
-  transform: translateX(-50%);
+  position: relative;
+  /* position: fixed; */
+  /* left: 50%; */
+  /* bottom: 1rem; */
+  /* transform: translateX(-50%); */
 }
 
 #progressbar__fill {
@@ -113,6 +128,7 @@
   text-align: right;
   font-weight: 700;
   color: hsla(0, 0%, 100%);
+  z-index: 1;
 
   /* text-shadow: 0.1em 0.1em 0 hsl(0, 0%, 100%), 0.25em 0.125em 0 hsla(0, 0%, 20%, 0.15); */
   text-shadow: -0.1em -0.1em 0 hsla(0, 0%, 20%), 0 -0.1em 0 hsla(0, 0%, 20%),

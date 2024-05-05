@@ -12,15 +12,15 @@ const list = document.querySelector("#list");
 const openConfigLists = document.querySelector("#openConfigLists");
 const configListsMenu = document.querySelector("#configListsMenu");
 openConfigLists.addEventListener("click", () => {
-  if (listId == null) {
-    Enable(configListsMenu);
-  } else {
-    currentList = lists[listId];
-    configureListMenuDiv__name.value = currentList.name;
-    configureListMenuDiv__description.value = currentList.description;
-    Enable(configureListMenu);
-    configureListMenuDiv__name.focus();
-  }
+  // if (listId == null) {
+  Enable(configListsMenu);
+  // } else {
+  //   currentList = lists[listId];
+  //   configureListMenuDiv__name.value = currentList.name;
+  //   configureListMenuDiv__description.value = currentList.description;
+  //   Enable(configureListMenu);
+  //   configureListMenuDiv__name.focus();
+  // }
 });
 
 // OpenConfigCurrentList menu
@@ -71,6 +71,36 @@ function TryCreateNewItem() {
   addNewItem__input.focus();
 }
 
+const gotomenubutton = document.querySelector("#gotomenubutton");
+
+gotomenubutton.addEventListener("click", () => {
+  let editingACard = false;
+  let childs = [...list__items.children];
+  for (let i = 0; i < childs.length - 1; i++) {
+    const child = childs[i];
+    console.log(i, child);
+
+    if (child.dataset.editing != "") continue;
+    console.log("editing");
+
+    let item__label = child.querySelector(".item__label");
+    let item__input = child.querySelector(".item__input");
+
+    if (item__label.textContent == item__input.value) continue;
+    console.log("diffirent text");
+
+    editingACard = true;
+  }
+
+  if (editingACard) {
+    let confirmDontSave = confirm("You will lose the changes made, are you sure?");
+    if (!confirmDontSave) return;
+  }
+
+  window.location.hash = "#";
+  UpdateMenuCards();
+});
+
 // MENU
 // menu - add card
 const addNewListButton = document.querySelector("#addNewListButton");
@@ -93,8 +123,8 @@ configMenu__CreateButton.addEventListener("click", () => {
   if (TestIsEmpty(addNewListMenu__name.value)) return;
   if (TestIsEmpty(addNewListMenu__description.value)) return;
   let newlist = {
-    name: addNewListMenu__name.value,
-    description: addNewListMenu__description.value,
+    name: addNewListMenu__name.value.trim(),
+    description: addNewListMenu__description.value.trim(),
     lastedit: NewDateAndTime(),
     items: [["First item", false]],
   };
@@ -177,12 +207,15 @@ if (isMobile) {
 
 function StartTouching(x, target, e) {
   console.log("StartTouching()");
+  console.log(x, target, e);
 
   if (listId == null) return;
 
   if (target != null) {
     if (target.classList[0] == "item__dragabblebutton") {
+      console.log(" - target.classList[0] == 'item__dragabblebutton' | ENTER");
       if (isMobile) {
+        console.log(" - - isMobile' | ENTER");
         console.warn("STARTTOUCHING");
         const item = target.parentElement;
         const pos = Number(item.dataset.id);
@@ -194,6 +227,8 @@ function StartTouching(x, target, e) {
       return;
     }
   }
+
+  if (!isMobile && x > 124 && !sideBarIsOpen) return;
 
   document.body.setAttribute("data-user-dont-select", "");
 
@@ -211,10 +246,20 @@ function StartTouching(x, target, e) {
 
 function EndTouching(x, target) {
   console.log("EndTouching()");
+  console.log(target);
 
   if (listId == null) return;
 
-  if (document.querySelector(".item.dragging") != null) {
+  if (document.querySelector(".item.dragging") != null) return;
+
+  if (isMobile) {
+    window.removeEventListener("touchmove", TouchMoved);
+  } else {
+    window.removeEventListener("mousemove", MouseMoved);
+  }
+
+  if (target == "lists__sidebar") {
+    console.log("lists__sidebar");
     return;
   }
 
@@ -269,17 +314,14 @@ function EndTouching(x, target) {
     if (disable == true) {
       Disable(lists__sidebar);
       Disable(lists__sidebar__dark);
+      sideBarIsOpen = false;
+    } else {
+      sideBarIsOpen = true;
     }
 
     sideBarPosX = 0;
     startSideBarPosX = 0;
   }, 200);
-
-  if (isMobile) {
-    window.removeEventListener("touchmove", TouchMoved);
-  } else {
-    window.removeEventListener("mousemove", MouseMoved);
-  }
 }
 
 function MouseMoved(e) {
@@ -288,10 +330,10 @@ function MouseMoved(e) {
 
   let difference = sideBarPosX - startSideBarPosX;
 
-  if (Math.abs(difference) > 10) {
-    Enable(lists__sidebar);
-    Enable(lists__sidebar__dark);
-  }
+  // if (Math.abs(difference) > 10) {
+  Enable(lists__sidebar);
+  Enable(lists__sidebar__dark);
+  // }
 
   UpdateSideBar();
 }

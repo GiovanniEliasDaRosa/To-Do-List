@@ -100,13 +100,33 @@ function CreateNewList(name, description, lastedit) {
 
   // Test
   let edittime = "";
-  edittime += Format(yearCurrent, year, "year", 0);
-  edittime += Format(monthCurrent, month, "month", 12);
-  edittime += Format(dayCurrent, day, "day", 0);
-  edittime += Format(hoursCurrent, hours, "hour", 24);
-  edittime += Format(minutesCurrent, minutes, "minute", 60);
+
+  let yearDifference = Format(yearCurrent, year, "year", 0);
+  let monthDifference = Format(monthCurrent, month, "month", 12);
+  let dayDifference = Format(dayCurrent, day, "day", 0);
+  let hoursDifference = Format(hoursCurrent, hours, "hour", 24);
+  let minutesDifference = Format(minutesCurrent, minutes, "minute", 60);
+
+  if (yearDifference != 0) {
+    // Edit was a year or more, show: years and months
+    edittime += yearDifference;
+    edittime += monthDifference;
+  } else if (monthDifference != 0) {
+    // Edit was a month or more, show: months and days
+    edittime += monthDifference;
+    edittime += dayDifference;
+  } else if (dayDifference != 0) {
+    // Edit was a day or more, show: days and hours
+    edittime += dayDifference;
+    edittime += hoursDifference;
+  } else {
+    // Edit under 24 hours, in case user updated now, it will return nothing
+    edittime += hoursDifference;
+    edittime += minutesDifference;
+  }
 
   if (edittime == "") {
+    // If the edit was under 1 minute show JUST NOW
     edittime = "Just now";
   }
 
@@ -140,12 +160,18 @@ function ShowList() {
     }
   });
 
-  for (let i = 0; i < lists[listId].items.length; i++) {
+  let totalItems = lists[listId].items.length;
+  let checked = 0;
+
+  for (let i = 0; i < totalItems; i++) {
     const currentItem = lists[listId].items[i];
+    if (currentItem[1] == true) {
+      checked++;
+    }
     CreateNewItem(currentItem[0], currentItem[1], i);
   }
 
-  currentPercentage = 0;
+  currentPercentage = Math.round((checked / totalItems) * 100);
   UpdateProgressBar();
 }
 
@@ -349,22 +375,22 @@ function UpdateProgressBar() {
 
   progressbar__fill.style.width = percentage + "%";
   progressbar__fill.style.backgroundColor = `hsla(110, 46%, ${10 + Clamp(32 * fraction)}%)`;
-  // progressbar__number.textContent = percentage + "%";
 
   let current = currentPercentage;
   let type = 1;
-
   if (current > percentage) {
     type = -1;
   }
 
-  let incrementBy = 20;
+  let difference = (percentage - current) / 10;
+  let add = difference;
 
   clearInterval(progressbar__number__counter);
 
   progressbar__number__counter = setInterval(() => {
-    current += type;
-    progressbar__number.textContent = current + "%";
+    current += add;
+    // current += (difference * 4) / (current + add);
+    progressbar__number.textContent = Math.round(current) + "%";
 
     if (type == 1) {
       if (current >= percentage) {
@@ -377,14 +403,12 @@ function UpdateProgressBar() {
         clearInterval(progressbar__number__counter);
       }
     }
-
-    incrementBy = Clamp(incrementBy++, 15, 100);
-  }, incrementBy);
+  }, 50);
 
   clearTimeout(progressDone);
   progressbar.removeAttribute("data-progress-done");
 
-  if (fraction > 0.9) {
+  if (fraction > 0.95) {
     setTimeout(() => {
       progressbar.setAttribute("data-progress-done", "");
       progressDone = setTimeout(() => {

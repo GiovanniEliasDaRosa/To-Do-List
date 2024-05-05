@@ -3,10 +3,6 @@
   height: 3em !important;
 }
 
-#gotomenubutton {
-  font-size: 1rem;
-}
-
 #lists__sidebar {
   /* background-color: rgb(0, 93, 111); */
   background: linear-gradient(0deg, #232c48, #4b5883);
@@ -38,9 +34,12 @@
   transition: 0.2s ease-out;
 }
 
-.lists__sidebar__items {
-  width: 3em !important;
-  height: 3em !important;
+.lists__sidebar__items,
+#gotomenubutton {
+  width: 3rem !important;
+  height: 3rem !important;
+  padding: 0;
+  font-size: 1rem;
 }
 
 /* #closeSideBar {

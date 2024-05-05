@@ -5,6 +5,7 @@
 
 :root {
   color-scheme: dark;
+  background-color: hsl(0, 2%, 6%);
 }
 
 body {
@@ -40,8 +41,10 @@ input[type="checkbox"] {
   height: 2em;
   border-radius: 0.25em;
   /* background: url("../img/unchecked.png") no-repeat; */
-  background-color: #283030;
-  border: solid 0.1em #919595;
+  background-color: hsl(180, 10%, 15%);
+  /* background-color: hsl(180, 9%, 17%); */
+  /* border: solid 0.1em hsl(180, 2%, 58%); */
+  border: solid 0.1em hsla(0, 0%, 100%, 0.4);
   overflow: hidden;
 }
 
@@ -68,6 +71,16 @@ input[type="checkbox"]:before {
   /* image-rendering: pixelated; */
 }
 
+input[type="checkbox"]:hover {
+  background-color: hsl(180, 5%, 25%);
+  border: solid 0.1em hsla(0, 0%, 100%, 0.5);
+}
+
+input[type="checkbox"]:focus-visible {
+  background-color: hsl(180, 5%, 35%);
+  border: solid 0.1em hsla(0, 0%, 100%, 0.6);
+}
+
 /* input text */
 input[type="text"],
 textarea {
@@ -78,6 +91,11 @@ textarea {
   border: 0.1em solid hsla(0, 0%, 100%, 0.3);
   color: hsl(0, 0%, 100%);
   width: 100%;
+}
+
+:is(input[type="text"], textarea):focus-visible {
+  background-color: hsla(0, 0%, 0%, 0.4);
+  border: 0.1em solid hsla(0, 0%, 100%, 0.5);
 }
 
 :is(input[type="text"], textarea)::placeholder {
