@@ -56,11 +56,11 @@
 }
 
 /* Responsives */
-@media (max-width: 550px) {
+@media (max-width: 600px) {
   .screen__div {
     height: 100vh;
     height: 100dvh;
-    width: 100vh;
+    width: 100vw;
   }
 }
 
@@ -103,7 +103,7 @@
   gap: 0.5em;
 }
 
-@media (max-width: 450px) {
+@media (max-width: 600px) {
   .screen__div__actions {
     justify-content: space-between;
     flex-direction: column;

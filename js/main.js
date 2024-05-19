@@ -2,12 +2,15 @@ const list__items = document.querySelector("#list__items");
 const itemTemplate = document.querySelector("#itemTemplate");
 const cards = document.querySelector("#cards");
 const cardTemplate = document.querySelector("#cardTemplate");
+const loadingSpinner = document.querySelector("#loadingSpinner");
+
 let progressDone = "";
 let currentPercentage = 0;
 let progressbar__number__counter = "";
 let currentPreviewItem = null;
 let bound = { x: 0, y: 0 };
 let diff = { x: 0, y: 0 };
+let updatingMenuTimeout = "";
 
 var lists = [
   {
@@ -48,6 +51,13 @@ function UpdateMenuCards() {
     CreateNewList(currentList.name, currentList.description, currentList.lastedit);
     CreateNewConfigMenuItem(currentList.name, i);
   }
+
+  clearTimeout(updatingMenuTimeout);
+  Enable(loadingSpinner);
+
+  updatingMenuTimeout = setTimeout(() => {
+    Disable(loadingSpinner);
+  }, 2000);
 }
 
 function CreateNewConfigMenuItem(name, pos) {

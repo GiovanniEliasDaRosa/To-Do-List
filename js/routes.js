@@ -80,6 +80,7 @@ function EnableMenuInterval() {
     // 30 * 2 * (minutes I want)
     // 2 * 30 for minutes and multiply for how many minutes
     // (60 / 30) = 2
+    // 1000 * 30 = 30.000 = 30 seconds  // 60 / 30 = 2  // 2 * 2 = 4 == 4 / 2 = 2 minutes
     if (updates >= 2 * 2) {
       clearInterval(menuInterval);
       console.log(

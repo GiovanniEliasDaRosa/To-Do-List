@@ -78,16 +78,16 @@ gotomenubutton.addEventListener("click", () => {
   let childs = [...list__items.children];
   for (let i = 0; i < childs.length - 1; i++) {
     const child = childs[i];
-    console.log(i, child);
+    // console.log(i, child);
 
     if (child.dataset.editing != "") continue;
-    console.log("editing");
+    // console.log("editing");
 
     let item__label = child.querySelector(".item__label");
     let item__input = child.querySelector(".item__input");
 
     if (item__label.textContent == item__input.value) continue;
-    console.log("diffirent text");
+    // console.log("diffirent text");
 
     editingACard = true;
   }
@@ -205,14 +205,15 @@ if (isMobile) {
   });
 }
 
-function StartTouching(x, target, e) {
-  console.log("StartTouching()");
-  console.log(x, target, e);
+function StartTouching(x, target, e = null) {
+  // console.log("StartTouching()");
+  // console.log(x, target, e);
 
   if (listId == null) return;
 
   if (target != null) {
     if (target.classList[0] == "item__dragabblebutton") {
+      console.log("Drag Button");
       console.log(" - target.classList[0] == 'item__dragabblebutton' | ENTER");
       if (isMobile) {
         console.log(" - - isMobile' | ENTER");
@@ -228,12 +229,16 @@ function StartTouching(x, target, e) {
     }
   }
 
-  if (!isMobile && x > 124 && !sideBarIsOpen) return;
-
-  document.body.setAttribute("data-user-dont-select", "");
-
   startSideBarPosX = x;
   sideBarPosX = x;
+
+  if (!isMobile && x > 32 && !sideBarIsOpen) {
+    startSideBarPosX = 0;
+    sideBarPosX = 0;
+    return;
+  }
+
+  document.body.setAttribute("data-user-dont-select", "");
 
   if (isMobile) {
     window.removeEventListener("touchmove", TouchMoved);
@@ -245,8 +250,7 @@ function StartTouching(x, target, e) {
 }
 
 function EndTouching(x, target) {
-  console.log("EndTouching()");
-  console.log(target);
+  // console.log(target);
 
   if (listId == null) return;
 
@@ -258,17 +262,16 @@ function EndTouching(x, target) {
     window.removeEventListener("mousemove", MouseMoved);
   }
 
-  if (target == "lists__sidebar") {
-    console.log("lists__sidebar");
-    return;
+  if (startSideBarPosX != 0) {
+    sideBarPosX = x;
   }
-
-  sideBarPosX = x;
 
   let difference = sideBarPosX - startSideBarPosX;
   let calc = -100;
   sideBarIsOpen = false;
   let disable = false;
+
+  if (target == "lists__sidebar" && Math.abs(difference) < 4) return;
 
   document.body.removeAttribute("data-user-dont-select");
   lists__sidebar.classList.add("animate");
@@ -276,7 +279,6 @@ function EndTouching(x, target) {
 
   if (difference > 40) {
     calc = 0;
-    sideBarIsOpen = true;
   } else {
     disable = true;
   }
@@ -311,7 +313,7 @@ function EndTouching(x, target) {
     lists__sidebar.classList.remove("animate");
     lists__sidebar__dark.classList.remove("animate");
 
-    if (disable == true) {
+    if (disable) {
       Disable(lists__sidebar);
       Disable(lists__sidebar__dark);
       sideBarIsOpen = false;
@@ -325,7 +327,7 @@ function EndTouching(x, target) {
 }
 
 function MouseMoved(e) {
-  console.log("MouseMoved()");
+  // console.log("MouseMoved()");
   sideBarPosX = e.clientX;
 
   let difference = sideBarPosX - startSideBarPosX;
@@ -339,7 +341,7 @@ function MouseMoved(e) {
 }
 
 function TouchMoved(e) {
-  console.log("TouchMoved()");
+  // console.log("TouchMoved()");
   sideBarPosX = e.changedTouches[0].clientX;
 
   let difference = sideBarPosX - startSideBarPosX;
@@ -353,7 +355,7 @@ function TouchMoved(e) {
 }
 
 function UpdateSideBar() {
-  console.log("UpdateSideBar()");
+  // console.log("UpdateSideBar()");
   // lists__sidebar__dark
   let difference = sideBarPosX - 20 - startSideBarPosX;
   let calc = 0;

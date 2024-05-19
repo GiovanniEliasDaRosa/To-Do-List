@@ -59,3 +59,8 @@
 .icons.xmark::before {
   content: "\f00d";
 }
+
+.icons.spinner::before {
+  /* content: "\f110"; */
+  content: "\f2f1";
+}

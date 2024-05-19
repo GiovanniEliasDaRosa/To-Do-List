@@ -88,7 +88,7 @@ itemDiv
 /* label & input */
 .item__label {
   transition: 1s ease-out;
-  user-select: all;
+  /* user-select: all; */
 }
 
 .item__label,

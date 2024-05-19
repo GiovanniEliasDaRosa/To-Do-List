@@ -89,13 +89,14 @@ textarea {
   padding: 0.2em 0.2em;
   background-color: hsla(0, 0%, 0%, 0.2);
   border: 0.1em solid hsla(0, 0%, 100%, 0.3);
-  color: hsl(0, 0%, 100%);
+  color: hsl(0, 0%, 80%);
   width: 100%;
 }
 
 :is(input[type="text"], textarea):focus-visible {
   background-color: hsla(0, 0%, 0%, 0.4);
   border: 0.1em solid hsla(0, 0%, 100%, 0.5);
+  color: hsl(0, 0%, 100%);
 }
 
 :is(input[type="text"], textarea)::placeholder {
