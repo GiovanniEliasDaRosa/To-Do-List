@@ -47,8 +47,7 @@ function UpdateScreen() {
     return;
   }
 
-  // alert(`List found: '${hash}'`);
-  console.log(`List found: '${hash}'`);
+  // console.log(`List found: '${hash}'`); // [tag:route]
   Disable(menu);
   Enable(list);
 
@@ -72,37 +71,38 @@ function EnableMenuInterval() {
   menuInterval = setInterval(() => {
     UpdateMenuCards();
     updates++;
-    console.log(
-      `%cUpdateMenuCards(${updates})`,
-      "padding: 1em; border: solid 0.1em hsla(0, 0%, 100%, 0.5); border-radius: 0.5em"
-    );
+    CustomLog(`UpdateMenuCards(${updates})`);
 
-    // 30 * 2 * (minutes I want)
-    // 2 * 30 for minutes and multiply for how many minutes
-    // (60 / 30) = 2
-    // 1000 * 30 = 30.000 = 30 seconds  // 60 / 30 = 2  // 2 * 2 = 4 == 4 / 2 = 2 minutes
+    /*
+      1000 * 30 = 30,000ms
+      30,000ms -> 30s
+      / Each 30 seconds equals to 2 times per half minute
+      60 / 30 = 2
+      / We want 2 minutes, so multiply by 2
+      2 * 2 = 4
+
+      // 4 cycles of 30 seconds is equal to 2 cycles of 1 minute
+      / 4 cycles / 2 = 2 cycles of 1 minute
+      4 / 2 = 2 minutes
+    */
+
     if (updates >= 2 * 2) {
       clearInterval(menuInterval);
-      console.log(
-        "%cTIMEOUT Of 2 MINUTES",
-        "padding: 1em; border: solid 0.1em hsla(0, 0%, 100%, 0.5); border-radius: 0.5em; background: hsla(0, 50%, 50%, 0.5)"
-      );
+      CustomLog("TIMEOUT Of 2 MINUTES");
     }
-    // }, 1000 * 30);
   }, 1000 * 30);
 }
 
-// 1000 * 30 = 30000 = 30s
-// 30 * 30 = 900s = 15m
-// 900 = 15
-// 30x = 5
-/*
-  45000 = 450x
-  x = 45000/450
-  x = 4500/45
-  x = 100
-*/
+function ListNotFoundError() {
+  EnableMenu();
 
+  let message = `[ERROR] Couldn't find a list with the name "${hash}", redirecting to homescreen`;
+  console.warn(message);
+  window.location.hash = "";
+  alert(message);
+}
+
+// Windon Manager
 window.addEventListener("blur", () => {
   clearTimeout(blurTimeout);
   blurTimeout = setTimeout(() => {
@@ -119,11 +119,13 @@ window.addEventListener("focus", () => {
   UpdateMenuCards();
 });
 
-function ListNotFoundError() {
-  EnableMenu();
+// < start >
+LoadData();
 
-  let message = `[ERROR] Couldn't find a list with the name "${hash}", redirecting to homescreen`;
-  console.warn(message);
-  window.location.hash = "";
-  alert(message);
+if (window.location.hash != "") {
+  hash = window.location.hash.replace("#", "");
 }
+
+UpdateMenuCards();
+UpdateScreen();
+// </ start >

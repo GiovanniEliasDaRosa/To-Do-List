@@ -1,5 +1,4 @@
 @import url(https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css);
-/* @import url(font-awesome.css); */
 
 .icons::before {
   display: inline-block;
@@ -61,6 +60,5 @@
 }
 
 .icons.spinner::before {
-  /* content: "\f110"; */
   content: "\f2f1";
 }

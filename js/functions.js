@@ -1,3 +1,8 @@
+const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+if (isMobile) {
+  document.body.setAttribute("data-mobile", "");
+}
+
 /* Enable & Disable elements */
 function Enable(element) {
   element.removeAttribute("aria-disabled");
@@ -20,23 +25,17 @@ function SaveData() {
   }
 
   let compiled = JSON.stringify(lists);
-  console.log("SAVED: ", compiled);
 
   localStorage.setItem("lists", compiled);
 }
 
 function LoadData() {
-  // console.log("LOADING DATA");
   let listgot = localStorage.getItem("lists");
 
-  // console.log(listgot);
   if (listgot == null) return;
-
-  // console.log("Not null | Trying to parse");
 
   try {
     lists = JSON.parse(listgot);
-    // console.log("Parse successful");
   } catch (e) {
     console.log("Erro trying to parse");
     console.error(e);
@@ -108,4 +107,12 @@ function TestIsEmpty(text) {
 
 function Clamp(number, min, max) {
   return Math.max(min, Math.min(number, max));
+}
+
+/* Custom */
+function CustomLog(text) {
+  console.log(
+    `%c${text}`,
+    "padding: 1em; border: solid 0.1em hsla(0, 0%, 100%, 0.5); border-radius: 0.5em; background: hsla(0, 50%, 50%, 0.5)"
+  );
 }

@@ -1,3 +1,6 @@
+const list = document.querySelector("#list");
+
+// Basic
 const list__items = document.querySelector("#list__items");
 const itemTemplate = document.querySelector("#itemTemplate");
 const cards = document.querySelector("#cards");
@@ -16,136 +19,275 @@ var lists = [
   {
     name: "Daily List",
     description: "Things to be done in a daily basis",
-    lastedit: "02/12/2023 | 18:32:05",
+    lastedit: NewDateAndTime(),
     items: [
-      ["item1", true],
-      ["item2", true],
-      ["item3", false],
+      ["item 1", true],
+      ["item 2", false],
+      ["item 3", false],
     ],
   },
 ];
 
-// start >
-LoadData();
+// List name
+const list__name = document.querySelector("#list__name");
 
-if (window.location.hash != "") {
-  hash = window.location.hash.replace("#", "");
+// Add item
+const addNewItem__input = document.querySelector("#addNewItem__input");
+const addNewItem__button = document.querySelector("#addNewItem__button");
+
+addNewItem__button.addEventListener("click", () => {
+  TryCreateNewItem();
+});
+
+addNewItem__input.addEventListener("keydown", (e) => {
+  if (e.key != "Enter") return;
+  TryCreateNewItem();
+});
+
+function TryCreateNewItem() {
+  if (TestIsEmpty(addNewItem__input.value)) return;
+
+  lists[listId].items.push([addNewItem__input.value, false]);
+  SaveData();
+  CreateNewItem(addNewItem__input.value, false, lists[listId].items.length - 1);
+
+  addNewItem__input.value = "";
+  addNewItem__input.focus();
 }
 
-UpdateMenuCards();
-UpdateScreen();
+const gotomenubutton = document.querySelector("#gotomenubutton");
 
-// < start
+gotomenubutton.addEventListener("click", () => {
+  let editingACard = false;
+  let childs = [...list__items.children];
+  for (let i = 0; i < childs.length - 1; i++) {
+    const child = childs[i];
 
-function UpdateMenuCards() {
-  [...cards.children].forEach((currentCard) => {
-    if (currentCard.id == "addNewListButton") return;
-    currentCard.remove();
-  });
+    if (child.dataset.editing != "") continue;
 
-  configMenuLists.innerHTML = "";
+    let item__label = child.querySelector(".item__label");
+    let item__input = child.querySelector(".item__input");
 
-  for (let i = 0; i < lists.length; i++) {
-    const currentList = lists[i];
+    if (item__label.textContent == item__input.value) continue;
 
-    CreateNewList(currentList.name, currentList.description, currentList.lastedit);
-    CreateNewConfigMenuItem(currentList.name, i);
+    editingACard = true;
   }
 
-  clearTimeout(updatingMenuTimeout);
-  Enable(loadingSpinner);
+  if (editingACard) {
+    let confirmDontSave = confirm("You will lose the changes made, are you sure?");
+    if (!confirmDontSave) return;
+  }
 
-  updatingMenuTimeout = setTimeout(() => {
-    Disable(loadingSpinner);
-  }, 2000);
-}
+  window.location.hash = "#";
+  UpdateMenuCards();
+});
 
-function CreateNewConfigMenuItem(name, pos) {
-  let templateContent = configMenuLists__itemTemplate.content;
-  let item = templateContent.querySelector(".cards__config").cloneNode(true);
+// Progressbar
+const progressbar = document.querySelector("#progressbar");
+const progressbar__fill = document.querySelector("#progressbar__fill");
+const progressbar__number = document.querySelector("#progressbar__number");
 
-  item.querySelector(".cards__config__title").textContent = name;
-  item.setAttribute("data-id", pos);
+// Side Bar
+const openSideBar = document.querySelector("#openSideBar");
+const closeSideBar = document.querySelector("#closeSideBar");
+const lists__sidebar = document.querySelector("#lists__sidebar");
+const lists__sidebar__dark = document.querySelector("#lists__sidebar__dark");
+let startSideBarPosX = 0;
+let sideBarPosX = 0;
+let sideBarIsOpen = false;
 
-  const delete__button = item.querySelector(".cards__config__deleteButton");
+if (isMobile) {
+  window.addEventListener("touchstart", (e) => {
+    StartTouching(e.touches[0].clientX, e.touches[0].target, e);
+  });
 
-  delete__button.addEventListener("click", () => {
-    let confirmDelete = confirm(
-      `Do you really want to delete the LIST "${name}"? [THERE IS NO GOING BACK]`
-    );
-    if (!confirmDelete) return;
-
-    let confirmType = prompt(
-      `Type [confirm] to delete the LIST "${name}" [THERE IS NO GOING BACK]:`
-    );
-    if (confirmType.toLowerCase() == "confirm") {
-      let position = Number(item.dataset.id);
-      lists.splice(position, 1);
-      SaveData();
-      UpdateMenuCards();
+  window.addEventListener("touchend", (e) => {
+    if (document.querySelector(".item.dragging") != null) {
+      // we were just dragging an item just now
+      BodyTouchend(e);
+      return;
     }
+
+    EndTouching(e.changedTouches[0].clientX, e.changedTouches[0].target.id);
+  });
+} else {
+  window.addEventListener("mousedown", (e) => {
+    StartTouching(e.clientX, e.target);
   });
 
-  configMenuLists.appendChild(item);
+  window.addEventListener("mouseup", (e) => {
+    EndTouching(e.clientX, e.target.id);
+  });
 }
 
-function CreateNewList(name, description, lastedit) {
-  let templateContent = cardTemplate.content;
-  let card = templateContent.querySelector(".card").cloneNode(true);
+function StartTouching(x, target, e = null) {
+  if (listId == null) return;
 
-  card.querySelector(".card__title").textContent = name;
+  if (target != null) {
+    if (target.classList[0] == "item__dragabblebutton") {
+      // console.log("Drag Button"); // [tag:itemdrag]
+      // console.log(" - target.classList[0] == 'item__dragabblebutton' | ENTER"); // [tag:itemdrag]
+      if (isMobile) {
+        // console.log(" - - isMobile' | ENTER"); // [tag:itemdrag]
+        // console.warn("STARTTOUCHING"); // [tag:itemdrag]
+        const item = target.parentElement;
+        const pos = Number(item.dataset.id);
+        StartDragging(item, e, e.touches[0].clientX, e.touches[0].clientY);
+        document.body.style.overflow = "hidden";
 
-  card.querySelector(".card__description").textContent = description;
-  card.querySelector(".card__editTime").textContent = `Edited in: ${lastedit}`;
+        window.addEventListener("touchmove", BodyTouchmove);
+      }
+      return;
+    }
+  }
 
-  card.href = `#${name}`;
+  startSideBarPosX = x;
+  sideBarPosX = x;
 
-  // Calculate date and time
+  if (!isMobile && x > 32 && !sideBarIsOpen) {
+    startSideBarPosX = 0;
+    sideBarPosX = 0;
+    return;
+  }
 
-  [day, month, year, hours, minutes] = SplitDateAndTime(lastedit);
+  document.body.setAttribute("data-user-dont-select", "");
 
-  let datetime = NewDateAndTime();
-  [dayCurrent, monthCurrent, yearCurrent, hoursCurrent, minutesCurrent] =
-    SplitDateAndTime(datetime);
-
-  // Test
-  let edittime = "";
-
-  let yearDifference = Format(yearCurrent, year, "year", 0);
-  let monthDifference = Format(monthCurrent, month, "month", 12);
-  let dayDifference = Format(dayCurrent, day, "day", 0);
-  let hoursDifference = Format(hoursCurrent, hours, "hour", 24);
-  let minutesDifference = Format(minutesCurrent, minutes, "minute", 60);
-
-  if (yearDifference != 0) {
-    // Edit was a year or more, show: years and months
-    edittime += yearDifference;
-    edittime += monthDifference;
-  } else if (monthDifference != 0) {
-    // Edit was a month or more, show: months and days
-    edittime += monthDifference;
-    edittime += dayDifference;
-  } else if (dayDifference != 0) {
-    // Edit was a day or more, show: days and hours
-    edittime += dayDifference;
-    edittime += hoursDifference;
+  if (isMobile) {
+    window.removeEventListener("touchmove", TouchMoved);
+    window.addEventListener("touchmove", TouchMoved);
   } else {
-    // Edit under 24 hours, in case user updated now, it will return nothing
-    edittime += hoursDifference;
-    edittime += minutesDifference;
+    window.removeEventListener("mousemove", MouseMoved);
+    window.addEventListener("mousemove", MouseMoved);
   }
-
-  if (edittime == "") {
-    // If the edit was under 1 minute show JUST NOW
-    edittime = "Just now";
-  }
-
-  card.querySelector(".card__lastEdit").textContent = `Last Edit: ${edittime}`;
-  cards.insertBefore(card, addNewListButton);
 }
 
+function EndTouching(x, target) {
+  if (listId == null) return;
+
+  if (document.querySelector(".item.dragging") != null) return;
+
+  if (isMobile) {
+    window.removeEventListener("touchmove", TouchMoved);
+  } else {
+    window.removeEventListener("mousemove", MouseMoved);
+  }
+
+  if (startSideBarPosX != 0) {
+    sideBarPosX = x;
+  }
+
+  let difference = sideBarPosX - startSideBarPosX;
+  let calc = -100;
+  sideBarIsOpen = false;
+  let disable = false;
+
+  if (target == "lists__sidebar" && Math.abs(difference) < 4) return;
+
+  document.body.removeAttribute("data-user-dont-select");
+  lists__sidebar.classList.add("animate");
+  lists__sidebar__dark.classList.add("animate");
+
+  if (difference > 40) {
+    calc = 0;
+  } else {
+    disable = true;
+  }
+
+  if (target == "openSideBar") {
+    calc = -100;
+  } else if (target == "closeSideBar") {
+    calc = 0;
+  }
+
+  lists__sidebar.style.transform = `TranslateX(${calc}%)`;
+  lists__sidebar__dark.style.opacity = calc / 100 + 1;
+
+  if (target == "openSideBar") {
+    calc = 0;
+    sideBarIsOpen = true;
+    disable = false;
+  } else if (target == "closeSideBar") {
+    calc = -100;
+    sideBarIsOpen = false;
+    disable = true;
+  }
+
+  setTimeout(() => {
+    lists__sidebar.style.transform = `TranslateX(${calc}%)`;
+    lists__sidebar__dark.style.opacity = calc / 100 + 1;
+  }, 10);
+
+  setTimeout(() => {
+    lists__sidebar.classList.remove("animate");
+    lists__sidebar__dark.classList.remove("animate");
+
+    if (disable) {
+      Disable(lists__sidebar);
+      Disable(lists__sidebar__dark);
+      sideBarIsOpen = false;
+    } else {
+      sideBarIsOpen = true;
+    }
+
+    sideBarPosX = 0;
+    startSideBarPosX = 0;
+  }, 200);
+}
+
+function MouseMoved(e) {
+  sideBarPosX = e.clientX;
+
+  // let difference = sideBarPosX - startSideBarPosX;
+  // if (Math.abs(difference) > 10)
+
+  Enable(lists__sidebar);
+  Enable(lists__sidebar__dark);
+
+  UpdateSideBar();
+}
+
+function TouchMoved(e) {
+  sideBarPosX = e.changedTouches[0].clientX;
+
+  let difference = sideBarPosX - startSideBarPosX;
+
+  if (Math.abs(difference) > 20) {
+    Enable(lists__sidebar);
+    Enable(lists__sidebar__dark);
+  }
+
+  UpdateSideBar();
+}
+
+function UpdateSideBar() {
+  let difference = sideBarPosX - 20 - startSideBarPosX;
+  let calc = 0;
+  if (sideBarIsOpen) {
+    calc = Clamp(difference, -100, 0);
+  } else {
+    calc = Clamp(difference - 100, -100, 0);
+  }
+  lists__sidebar.style.transform = `TranslateX(${calc}%)`;
+  lists__sidebar__dark.style.opacity = calc / 100 + 1;
+}
+
+openSideBar.addEventListener("click", () => {
+  Enable(lists__sidebar);
+  Enable(lists__sidebar__dark);
+  EndTouching(0, "openSideBar");
+
+  closeSideBar.focus();
+});
+
+closeSideBar.addEventListener("click", () => {
+  EndTouching(0, "closeSideBar");
+
+  openSideBar.focus();
+});
+
+// Show Items from current List
 function ShowList() {
-  console.log(`ShowList(${hash})`);
+  // console.log(`ShowList(${hash})`); // [tag:route]
   for (let i = 0; i < lists.length; i++) {
     const currentList = lists[i];
     if (currentList.name == hash) {
@@ -362,6 +504,7 @@ function EditItem(item) {
   }
 }
 
+// Progress Bar
 function UpdateProgressBar() {
   const currentListItems = lists[listId].items;
   let totalItems = currentListItems.length;
@@ -430,9 +573,9 @@ function UpdateProgressBar() {
   currentPercentage = percentage;
 }
 
-/* item functions */
+/* Dragging item Mobile & PC*/
 function StartDragging(item, e, clientX, clientY) {
-  console.log("StartDragging");
+  // console.log("StartDragging"); // [tag:itemdrag]
   let x = clientX;
   let y = clientY;
   const frompoint = document.elementFromPoint(x, y);
@@ -504,8 +647,8 @@ function Dragging(item, clientY, pos) {
 }
 
 function EndDragging(item, clientY, pos) {
+  // console.log("EndDragging"); // [tag:itemdrag]
   let save = true;
-  console.log("EndDragging");
   item.classList.remove("dragging");
 
   let x = bound.x;
@@ -569,7 +712,7 @@ function EndDragging(item, clientY, pos) {
   }, 1100);
 }
 
-/* body functions */
+/* Dragging item Mobile */
 function BodyTouchmove(e) {
   // console.log("BodyTouchmove", e);
   const item = e.touches[0].target.parentElement;
