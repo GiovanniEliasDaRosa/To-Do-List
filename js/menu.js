@@ -7,17 +7,8 @@ openConfigLists.addEventListener("click", () => {
   Enable(configListsMenu);
 });
 
-// OpenConfigCurrentList menu
-const openConfigCurrentList = document.querySelector("#openConfigCurrentList");
-const configCurrentListMenu = document.querySelector("#configCurrentListMenu");
-openConfigCurrentList.addEventListener("click", () => {
-  currentList = lists[listId];
-  configureListMenuDiv__name.value = currentList.name;
-  configureListMenuDiv__description.value = currentList.description;
-  Enable(configCurrentListMenu);
-  configureListMenuDiv__name.focus();
-});
-
+// Screen
+const screens = [...document.querySelectorAll(".screen")];
 const screen__div__actions__close = [...document.querySelectorAll(".screen__div__actions__close")];
 
 screen__div__actions__close.forEach((closeButton) => {
@@ -26,6 +17,25 @@ screen__div__actions__close.forEach((closeButton) => {
   });
 });
 
+window.onkeyup = (e) => {
+  console.log(e);
+  if (e.key != "Escape") return;
+
+  let openScreen = null;
+
+  screens.forEach((screen) => {
+    if (screen.ariaDisabled == null) {
+      openScreen = screen.querySelector(".screen__div__actions__close__button");
+    }
+  });
+
+  if (openScreen == null) {
+    return;
+  }
+
+  openScreen.click();
+};
+
 // Add New List
 const addNewListButton = document.querySelector("#addNewListButton");
 
@@ -33,15 +43,6 @@ const addNewListMenu = document.querySelector("#addNewListMenu");
 const addNewListMenu__name = document.querySelector("#addNewListMenu__name");
 const addNewListMenu__description = document.querySelector("#addNewListMenu__description");
 const configMenu__CreateButton = document.querySelector("#configMenu__CreateButton");
-
-const configureListMenu = document.querySelector("#configureListMenu");
-const configureListMenuDiv__name = document.querySelector("#configureListMenuDiv__name");
-const configureListMenuDiv__description = document.querySelector(
-  "#configureListMenuDiv__description"
-);
-const configureListMenuDiv__SaveButton = document.querySelector(
-  "#configureListMenuDiv__SaveButton"
-);
 
 configMenu__CreateButton.addEventListener("click", () => {
   if (TestIsEmpty(addNewListMenu__name.value)) return;
@@ -122,7 +123,6 @@ function CreateNewList(name, description, lastedit) {
   card.href = `#${name}`;
 
   // Calculate date and time
-
   [day, month, year, hours, minutes] = SplitDateAndTime(lastedit);
 
   let datetime = NewDateAndTime();

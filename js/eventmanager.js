@@ -10,3 +10,9 @@ Disable(configListsMenu);
 Disable(configCurrentListMenu);
 Disable(lists__sidebar);
 Disable(lists__sidebar__dark);
+Disable(exportListMenu);
+Disable(importListMenu);
+
+// setTimeout(() => {
+//   openConfigCurrentList.click();
+// }, 500);

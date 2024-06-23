@@ -5,6 +5,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 20;
 }
 
 .screen__div {
@@ -134,3 +135,28 @@
 
 /* screen__div__actions__left */
 /* screen__div__actions__right */
+
+/* exportListMenu */
+/* exportListMenu
+exportListMenuDiv
+exportListMenu__output
+exportListMenu__textarea
+exportListMenu__clipboard */
+
+#exportListMenu__TextAndButton {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#exportListMenu__Textarea {
+  width: 100%;
+}
+
+#exportListMenu__DownloadButton {
+  align-self: flex-start;
+}
+
+#importListMenu__ImportFileLabel {
+  align-self: flex-start;
+}

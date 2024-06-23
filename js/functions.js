@@ -75,10 +75,11 @@ function NewDateAndTime() {
 }
 
 function Format(now, saved, complete, typeadd) {
-  let difference = now - saved;
+  let difference = saved - now;
+
   if (difference != 0) {
-    if (difference < 0) {
-      difference += typeadd / 2;
+    if (now > saved) {
+      difference = now - saved;
     }
 
     return `${difference}${complete}${difference > 1 ? "s" : ""} `;

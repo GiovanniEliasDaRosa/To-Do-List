@@ -55,11 +55,18 @@
 }
 
 .card__description {
-  padding-block: 0.5em;
+  padding-top: 0.5em;
   border-top: solid 0.1em hsla(0, 0%, 100%, 0.5);
-  border-bottom: solid 0.1em hsla(0, 0%, 100%, 0.5);
+  /* border-bottom: solid 0.1em hsla(0, 0%, 100%, 0.5); */
   height: 100%;
   white-space: pre-wrap;
+  overflow: hidden;
+}
+
+.card__editTime {
+  margin-top: 0.5em;
+  padding-top: 0.5em;
+  border-top: solid 0.1em hsla(0, 0%, 100%, 0.5);
 }
 
 /* .card__editTime {

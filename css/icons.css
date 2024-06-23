@@ -62,3 +62,21 @@
 .icons.spinner::before {
   content: "\f2f1";
 }
+
+.icons.download::before {
+  content: "\f56d";
+}
+
+.icons.upload::before {
+  content: "\f574";
+}
+
+.icons.clipboard::before {
+  content: "\f0c5";
+  font-weight: 200;
+}
+
+.icons.clipboardCheck::before {
+  content: "\f0c5";
+  font-weight: 600;
+}

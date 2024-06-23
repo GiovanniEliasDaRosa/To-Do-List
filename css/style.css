@@ -93,6 +93,10 @@ textarea {
   width: 100%;
 }
 
+textarea {
+  min-height: 4em;
+}
+
 :is(input[type="text"], textarea):focus-visible {
   background-color: hsla(0, 0%, 0%, 0.4);
   border: 0.1em solid hsla(0, 0%, 100%, 0.5);

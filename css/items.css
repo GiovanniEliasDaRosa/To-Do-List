@@ -12,7 +12,8 @@
 }
 
 .animatedrop:not(.preview) {
-  animation: 1s DropItem ease-out forwards;
+  opacity: 0;
+  animation: 0.5s DropItem ease-out forwards 0.5s;
 }
 
 @keyframes DropItem {

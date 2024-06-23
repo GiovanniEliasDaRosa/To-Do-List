@@ -47,11 +47,9 @@
 
     <div id="list">
       <button class="icons nomargin square bars" id="openSideBar"></button>
-      <!-- <div id="list__title"> -->
       <h1 id="list__title__h1">
         <span id="list__listspan">List:</span> <span id="list__name">[]</span>
       </h1>
-      <!-- </div> -->
 
       <div id="list__items">
         <div id="addNewItem">
@@ -136,7 +134,11 @@
             <button disabled>Export</button>
           </div>
           <div class="screen__div__actions__right">
-            <button class="screen__div__actions__close onlyoone">Close</button>
+            <button
+              class="screen__div__actions__close screen__div__actions__close__button onlyoone"
+            >
+              Close
+            </button>
           </div>
         </div>
       </div>
@@ -174,8 +176,103 @@
             </p>
           </div>
           <div class="screen__div__actions__right flex">
-            <button class="screen__div__actions__close">Cancel</button>
+            <button class="screen__div__actions__close screen__div__actions__close__button">
+              Cancel
+            </button>
             <button id="configMenu__CreateButton">Create</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="exportListMenu" class="screen">
+      <div id="exportListMenuDiv" class="screen__div">
+        <h1>Export Data</h1>
+
+        <div class="screen__div__cards">
+          <div id="exportListMenu__TextAndButton">
+            <p>Copy here</p>
+            <button
+              class="square icons nomargin clipboard"
+              id="exportListMenu__ClipboardButtton"
+            ></button>
+          </div>
+          <textarea
+            class="screen__div__textarea"
+            id="exportListMenu__Textarea"
+            placeholder="JSON Data export"
+          ></textarea>
+
+          <p>Download file</p>
+          <button class="icons download" id="exportListMenu__DownloadButton">Download file</button>
+        </div>
+
+        <div class="screen__div__actions">
+          <div class="screen__div__actions__left">
+            <button
+              class="screen__div__actions__close screen__div__actions__close__button onlyoone"
+              id="exportListMenu__GoBackButton"
+            >
+              Go Back
+            </button>
+          </div>
+          <div class="screen__div__actions__right">
+            <button class="screen__div__actions__close onlyoone">Ok</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="importListMenu" class="screen">
+      <div id="importListMenuDiv" class="screen__div">
+        <h1>Import Data</h1>
+
+        <div class="screen__div__cards">
+          <p>Paste Here</p>
+
+          <textarea
+            class="screen__div__textarea"
+            id="importListMenu__Textarea"
+            placeholder="JSON Data import"
+          ></textarea>
+
+          <p>Import file</p>
+          <!-- <button class="icons download" id="importListMenu__ImportFileButton">Import file</button> -->
+          <label
+            class="buttons icons upload"
+            id="importListMenu__ImportFileLabel"
+            for="importListMenu__ImportFileButton"
+            >Import file</label
+          >
+          <p id="importListMenu__ImportFileName">nameoffile.txt</p>
+          <input type="file" id="importListMenu__ImportFileButton" style="display: none" />
+
+          <!-- <div id="ExportAndInportData">
+            <div id="OutputGroup" style="height: 0px; opacity: 0; width: 200px">
+              <p id="Output">Imported Hello.txt</p>
+              <p id="CloseButton" onclick="CloseOutPut()">×</p>
+            </div>
+            <label class="ExpAndInpDataButton" for="file-selector">
+              Import Data
+              <input type="file" id="file-selector" /><br />
+            </label>
+            <p class="ExpAndInpDataButton" onclick="DownloadData()">Export Data</p>
+          </div> -->
+        </div>
+
+        <div class="screen__div__actions">
+          <div class="screen__div__actions__left">
+            <button
+              class="screen__div__actions__close screen__div__actions__close__button onlyoone"
+              id="importListMenu__GoBackButton"
+            >
+              Go Back
+            </button>
+          </div>
+          <div class="screen__div__actions__right">
+            <button class="screen__div__actions__close onlyoone" id="importListMenu__ImportButton">
+              Import
+            </button>
           </div>
         </div>
       </div>
@@ -208,11 +305,17 @@
 
         <div class="screen__div__actions">
           <div class="screen__div__actions__left">
-            <button disabled>Import</button>
-            <button disabled>Export</button>
+            <button class="screen__div__actions__close" id="configureListMenuDiv__ImportButton">
+              Import
+            </button>
+            <button class="screen__div__actions__close" id="configureListMenuDiv__ExportButton">
+              Export
+            </button>
           </div>
           <div class="screen__div__actions__right flex">
-            <button class="screen__div__actions__close">Cancel</button>
+            <button class="screen__div__actions__close screen__div__actions__close__button">
+              Cancel
+            </button>
             <button id="configureListMenuDiv__SaveButton">Save</button>
           </div>
         </div>

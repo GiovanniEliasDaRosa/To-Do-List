@@ -425,7 +425,6 @@ function CreateNewItem(content, checked, pos) {
     item__moveup.addEventListener("click", () => {
       if (pos == 0) return;
 
-      console.log(pos);
       let temp = lists[listId].items[pos - 1];
       lists[listId].items[pos - 1] = lists[listId].items[pos];
       lists[listId].items[pos] = temp;
@@ -440,7 +439,6 @@ function CreateNewItem(content, checked, pos) {
     item__movedown.addEventListener("click", () => {
       if (pos >= lists[listId].items.length - 1) return;
 
-      console.log(pos);
       let temp = lists[listId].items[pos + 1];
       lists[listId].items[pos + 1] = lists[listId].items[pos];
       lists[listId].items[pos] = temp;
@@ -578,19 +576,14 @@ function StartDragging(item, e, clientX, clientY) {
   // console.log("StartDragging"); // [tag:itemdrag]
   let x = clientX;
   let y = clientY;
-  const frompoint = document.elementFromPoint(x, y);
+  const frompoint = document.elementFromPoint(x, clientY);
 
   if (frompoint.classList[0] != "item__dragabblebutton") {
     e.preventDefault();
     return;
   }
 
-  // console.log("currentPreviewItem", currentPreviewItem);
   if (currentPreviewItem == null) {
-    // console.log(
-    //   "%cCHANGE currentPreviewItem",
-    //   "padding: 0.5em; background: hsla(0, 100%, 50%, 0.2)"
-    // );
     currentPreviewItem = item.cloneNode(true);
   }
 
@@ -602,7 +595,7 @@ function StartDragging(item, e, clientX, clientY) {
 
   currentPreviewItem.classList.add("preview");
   currentPreviewItem.style.left = `${bound.x}px`;
-  currentPreviewItem.style.top = `${bound.y}px`;
+  currentPreviewItem.style.top = `${bound.y + window.scrollY}px`;
 
   document.body.appendChild(currentPreviewItem);
 
@@ -611,9 +604,8 @@ function StartDragging(item, e, clientX, clientY) {
 
 function Dragging(item, clientY, pos) {
   // console.log(`Dragging(item, ${clientY}, ${pos})`);
-
   let x = bound.x;
-  let y = clientY - diff.y;
+  let y = clientY + window.scrollY - diff.y;
 
   if (clientY == 0) {
     y = -128;
@@ -622,10 +614,10 @@ function Dragging(item, clientY, pos) {
   currentPreviewItem.style.left = `${x}px`;
   currentPreviewItem.style.top = `${y}px`;
 
-  const frompoint = document.elementFromPoint(x, clientY);
+  const frompoint = document.elementFromPoint(x, clientY - diff.y);
 
   if (frompoint == null || frompoint.classList[0] != "item") {
-    // console.log("%cNONE FOUND", "padding: 0.5em; background: hsla(0, 100%, 50%, 0.2)");
+    console.log("%cNONE FOUND", "padding: 0.5em; background: hsla(0, 100%, 50%, 0.2)");
     return;
   }
 
@@ -647,17 +639,22 @@ function Dragging(item, clientY, pos) {
 }
 
 function EndDragging(item, clientY, pos) {
-  // console.log("EndDragging"); // [tag:itemdrag]
+  console.log("EndDragging"); // [tag:itemdrag]
   let save = true;
   item.classList.remove("dragging");
 
   let x = bound.x;
+  let y = clientY + window.scrollY - diff.y;
+
   const frompoint = document.elementFromPoint(x, clientY);
-  if (frompoint == null || frompoint.classList[0] != "item") save = false;
+
+  if (frompoint == null || frompoint.classList[0] != "item") {
+    save = false;
+    console.log("%cNONE FOUND", "padding: 0.5em; background: hsla(0, 100%, 50%, 0.2)");
+  }
 
   let wantedpos = null;
 
-  let y = clientY - diff.y;
   currentPreviewItem.style.left = `${x}px`;
   currentPreviewItem.style.top = `${y}px`;
 
@@ -685,7 +682,8 @@ function EndDragging(item, clientY, pos) {
   }
 
   let changed = [...list__items.children][wantedpos];
-  let wantedY = changed.getBoundingClientRect().y;
+  let wantedY = changed.getBoundingClientRect().y + window.scrollY;
+
   changed.classList.add("animatedrop");
 
   currentPreviewItem.style.transition = "top 0.5s ease-out, opacity 0.5s ease-out 0.5s";
@@ -698,7 +696,7 @@ function EndDragging(item, clientY, pos) {
   setTimeout(() => {
     currentPreviewItem.style.top = `${wantedY}px`;
     currentPreviewItem.style.opacity = "0";
-  }, 100);
+  }, 10);
 
   setTimeout(() => {
     changed.classList.remove("animatedrop");
@@ -709,7 +707,7 @@ function EndDragging(item, clientY, pos) {
     dragabblebuttons.forEach((drag) => {
       Enable(drag, false);
     });
-  }, 1100);
+  }, 500);
 }
 
 /* Dragging item Mobile */
@@ -732,3 +730,262 @@ function BodyTouchend(e) {
 
   window.removeEventListener("touchmove", BodyTouchmove);
 }
+
+// OpenConfigCurrentList menu
+const configureListMenu = document.querySelector("#configureListMenu");
+const openConfigCurrentList = document.querySelector("#openConfigCurrentList");
+const configCurrentListMenu = document.querySelector("#configCurrentListMenu");
+const configureListMenuDiv__name = document.querySelector("#configureListMenuDiv__name");
+const configureListMenuDiv__description = document.querySelector(
+  "#configureListMenuDiv__description"
+);
+const configureListMenuDiv__SaveButton = document.querySelector(
+  "#configureListMenuDiv__SaveButton"
+);
+
+openConfigCurrentList.addEventListener("click", () => {
+  currentList = lists[listId];
+  configureListMenuDiv__name.value = currentList.name;
+  configureListMenuDiv__description.value = currentList.description;
+  Enable(configCurrentListMenu);
+  configureListMenuDiv__name.focus();
+});
+
+// Screen Buttons
+// Export
+const exportListMenu = document.querySelector("#exportListMenu");
+const configureListMenuDiv__ExportButton = document.querySelector(
+  "#configureListMenuDiv__ExportButton"
+);
+configureListMenuDiv__ExportButton.addEventListener("click", () => {
+  ExportData();
+});
+
+const exportListMenu__GoBackButton = document.querySelector("#exportListMenu__GoBackButton");
+// exportListMenuDiv
+// screen__div__cards
+const exportListMenu__Output = document.querySelector("#exportListMenu__Output");
+const exportListMenu__Textarea = document.querySelector("#exportListMenu__Textarea");
+const exportListMenu__ClipboardButtton = document.querySelector(
+  "#exportListMenu__ClipboardButtton"
+);
+const exportListMenu__DownloadButton = document.querySelector("#exportListMenu__DownloadButton");
+let clipboardTimeout = "";
+
+exportListMenu__GoBackButton.addEventListener("click", () => {
+  openConfigCurrentList.click();
+});
+
+function ExportData() {
+  Enable(exportListMenu);
+
+  exportListMenu__Textarea.value = JSON.stringify(lists[listId]);
+  exportListMenu__Textarea.focus();
+}
+
+exportListMenu__ClipboardButtton.addEventListener("click", () => {
+  exportListMenu__Textarea.select();
+  document.execCommand("copy");
+
+  clearTimeout(clipboardTimeout);
+  exportListMenu__ClipboardButtton.classList.add("clipboardCheck");
+
+  clipboardTimeout = setTimeout(() => {
+    exportListMenu__ClipboardButtton.classList.remove("clipboardCheck");
+  }, 1000);
+});
+
+exportListMenu__DownloadButton.addEventListener("click", () => {
+  // Daily List-19_05_2024 _ 20_07_01
+
+  let lastEdit = lists[listId].lastedit.replaceAll(" _ ", "-");
+
+  var filename = `${lists[listId].name}-${lastEdit}`;
+  let text = JSON.stringify(lists[listId], null, 1);
+
+  var element = document.createElement("a");
+  element.setAttribute("target", "_blank");
+  element.setAttribute("href", "data:text/plain;charset=utf-8," + encodeURIComponent(text));
+  element.setAttribute("download", filename);
+  element.style.display = "none";
+  document.body.appendChild(element);
+  element.click();
+  document.body.removeChild(element);
+});
+
+/* import */
+const importListMenu = document.querySelector("#importListMenu");
+const configureListMenuDiv__ImportButton = document.querySelector(
+  "#configureListMenuDiv__ImportButton"
+);
+const importListMenu__GoBackButton = document.querySelector("#importListMenu__GoBackButton");
+
+const importListMenu__Textarea = document.querySelector("#importListMenu__Textarea");
+const importListMenu__ImportButton = document.querySelector("#importListMenu__ImportButton");
+const importListMenu__ImportFileButton = document.querySelector(
+  "#importListMenu__ImportFileButton"
+);
+const importListMenu__ImportFileName = document.querySelector("#importListMenu__ImportFileName");
+let animatingfilename = "";
+
+importListMenu__GoBackButton.addEventListener("click", () => {
+  openConfigCurrentList.click();
+});
+
+configureListMenuDiv__ImportButton.addEventListener("click", () => {
+  Enable(importListMenu);
+});
+
+importListMenu__ImportButton.addEventListener("click", () => {
+  let imported = importListMenu__Textarea.value;
+  let parsed = null;
+  let hasimportedfile = importListMenu__ImportFileButton.files[0] != null;
+
+  try {
+    parsed = JSON.parse(imported);
+  } catch (e) {
+    if (!hasimportedfile) {
+      console.error(e);
+      return;
+    }
+  }
+
+  if (parsed == null && !hasimportedfile) {
+    return;
+  }
+  if (hasimportedfile) {
+    HandleFiles();
+  } else {
+    lists[listId] = parsed;
+    ShowList();
+  }
+});
+
+function ImportData(Text, FileName) {
+  console.log("Importing Data...");
+  console.log(Text, FileName);
+
+  let Result = "";
+  let parsed = null;
+
+  try {
+    parsed = JSON.parse(Text);
+    console.log("parsed", parsed);
+
+    if (parsed == null) {
+      console.log("Empty File");
+    }
+    Result = `Imported ${FileName}`;
+
+    for (let i = 0; i < lists.length; i++) {
+      const test = lists[i];
+      if (i == listId) continue;
+
+      if (test.name == parsed.name) {
+        console.log("test.name == parsed.name");
+        parsed.name += "-" + Math.round(Math.random() * 1000000000);
+        let tests = 0;
+
+        while (test.name == parsed.name || tests > 100) {
+          for (let i = 0; i < lists.length; i++) {
+            const test = lists[i];
+            if (i == listId) continue;
+            if (test.name == parsed.name) {
+              parsed.name += "-" + Math.round(Math.random() * 1000000000);
+            }
+          }
+        }
+
+        if (tests > 100) {
+          parsed.name += "-" + Math.round(Math.random() * 1000000000000000000);
+        }
+
+        console.log(test.name, parsed.name);
+      }
+    }
+
+    lists[listId] = parsed;
+    SaveData();
+
+    window.location.hash = `#${parsed.name}`;
+  } catch (e) {
+    Result = `<strong>Error file not valid</strong>`;
+
+    // OutputGroup.classList.add("Error");
+    // setTimeout(() => {
+    //   OutputGroup.classList.remove("Error");
+    // }, 1500);
+
+    console.error(e);
+
+    console.warn("Error file not valid"); // error in the above string (in this case, yes)!
+    return;
+  }
+
+  console.log("Result", Result);
+}
+
+importListMenu__ImportFileButton.addEventListener("change", () => {
+  HandleFiles(true);
+});
+
+async function HandleFiles(viewname = false) {
+  console.log("handleFiles");
+
+  const currentFile = importListMenu__ImportFileButton.files[0];
+  const FileName = currentFile.name;
+
+  if (viewname) {
+    // Run this in when uploading a file to see the name
+    importListMenu__ImportFileName.textContent = "";
+    clearInterval(animatingfilename);
+    let pos = 0;
+    let max = FileName.length - 1;
+    let lerptime = 1000 / FileName.length;
+    animatingfilename = setInterval(() => {
+      importListMenu__ImportFileName.textContent += FileName[pos];
+      pos++;
+      if (pos > max) {
+        clearInterval(animatingfilename);
+      }
+    }, lerptime);
+    return;
+  } else {
+    importListMenu__ImportFileName.textContent = "";
+  }
+
+  // importListMenu__ImportFileButton.files[0].text().then((result) => {});
+
+  try {
+    const content = await currentFile.text();
+    ImportData(content, FileName);
+  } catch (error) {
+    console.error("Error fetching file:", error);
+  }
+}
+
+// fileSelector.addEventListener("change", function () {
+//   var fr = new FileReader();
+//   fr.onload = function () {
+//     result = fr.result;
+//     ImportData(result, FileName);
+//   };
+//   fr.readAsText(this.files[0]);
+//   let FileName = this.files[0].name;
+// });
+
+// const currentFile = this.files[0]; /* now you can work with the file list */
+
+// let FileName = currentFile.name;
+
+// // var fr = new FileReader();
+// // let result = fr.readAsText(currentFile);
+// // let result = "";
+// // let test = await importListMenu__ImportFileButton.files[0].text();
+// importListMenu__ImportFileButton.files[0].text().then((result) => {
+//   console.log("result", result);
+//   console.log("FileName", FileName);
+//   console.log("this.files[0]", currentFile);
+
+//   ImportData(result, FileName);
+// });
