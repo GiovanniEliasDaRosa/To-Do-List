@@ -18,7 +18,6 @@ screen__div__actions__close.forEach((closeButton) => {
 });
 
 window.onkeyup = (e) => {
-  console.log(e);
   if (e.key != "Escape") return;
 
   let openScreen = null;
