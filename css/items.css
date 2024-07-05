@@ -60,31 +60,27 @@
   border: solid 0.1em hsla(0, 0%, 100%, 0.02);
 }
 
-.item:has(> .item__checkbox:checked) .item__label {
-  text-decoration: line-through;
-  color: hsla(0, 0%, 100%, 0.6);
-  animation: 0.5s checkit 0.5s forwards;
-}
-
-/* label & input */
-.item__label {
-  transition: 1s ease-out;
-  /* user-select: all; */
-}
-
-.item__label,
 .item__input {
   font-size: 1rem;
   padding: 0.2em 0.2em;
-  border: 0.1em solid transparent;
+  border-radius: 0.5em;
+
+  background-color: hsla(0, 0%, 0%, 0);
+  border: 0.1em solid hsla(0, 0%, 100%, 0);
+  color: hsl(0, 0%, 80%);
 }
 
-/* .item__input {
-  height: 100%;
-  border-radius: 0.5em;
-  background-color: hsla(0, 0%, 0%, 0.5);
+.item:has(> .item__checkbox:checked) .item__input:not(:focus-visible) {
+  text-decoration: line-through;
+  color: hsla(0, 0%, 100%, 0.6);
+  transition: color 0.5s ease-out;
+}
+
+.item__input:focus-visible {
+  background-color: hsla(0, 0%, 0%, 0.2);
   border: 0.1em solid hsla(0, 0%, 100%, 0.3);
-} */
+  color: hsl(0, 0%, 100%);
+}
 
 /* addNewItem */
 #addNewItem {
