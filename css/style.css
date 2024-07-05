@@ -46,6 +46,7 @@ input[type="checkbox"] {
   /* border: solid 0.1em hsl(180, 2%, 58%); */
   border: solid 0.1em hsla(0, 0%, 100%, 0.4);
   overflow: hidden;
+  cursor: pointer;
 }
 
 input[type="checkbox"]:before {
@@ -82,7 +83,7 @@ input[type="checkbox"]:focus-visible {
 }
 
 /* input text */
-input[type="text"],
+input[type="text"]:not(.item__input),
 textarea {
   border-radius: 0.5em;
   font-size: 1rem;
@@ -97,7 +98,7 @@ textarea {
   min-height: 4em;
 }
 
-:is(input[type="text"], textarea):focus-visible {
+:is(input[type="text"]:not(.item__input), textarea):focus-visible {
   background-color: hsla(0, 0%, 0%, 0.4);
   border: 0.1em solid hsla(0, 0%, 100%, 0.5);
   color: hsl(0, 0%, 100%);

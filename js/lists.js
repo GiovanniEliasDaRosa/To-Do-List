@@ -60,22 +60,17 @@ const gotomenubutton = document.querySelector("#gotomenubutton");
 gotomenubutton.addEventListener("click", () => {
   let editingACard = false;
   let childs = [...list__items.children];
+
   for (let i = 0; i < childs.length - 1; i++) {
     const child = childs[i];
 
     if (child.dataset.editing != "") continue;
-
-    let item__label = child.querySelector(".item__label");
-    let item__input = child.querySelector(".item__input");
-
-    if (item__label.textContent == item__input.value) continue;
-
+    SaveItem(childs[i]);
     editingACard = true;
   }
 
   if (editingACard) {
-    let confirmDontSave = confirm("You will lose the changes made, are you sure?");
-    if (!confirmDontSave) return;
+    clearTimeout(timeouttosave);
   }
 
   window.location.hash = "#";
@@ -95,6 +90,7 @@ const lists__sidebar__dark = document.querySelector("#lists__sidebar__dark");
 let startSideBarPosX = 0;
 let sideBarPosX = 0;
 let sideBarIsOpen = false;
+let timeouttosave = "";
 
 if (isMobile) {
   window.addEventListener("touchstart", (e) => {
@@ -330,7 +326,7 @@ function ShowList() {
 function CreateNewItem(content, checked, pos) {
   let templateContent = itemTemplate.content;
   // let item = templateContent.querySelector(".itemDiv").cloneNode(true);
-  let item = templateContent.querySelector(".item").cloneNode(true);
+  const item = templateContent.querySelector(".item").cloneNode(true);
 
   // item.querySelector(".item").setAttribute("data-id", pos);
   item.setAttribute("data-id", pos);
@@ -339,10 +335,10 @@ function CreateNewItem(content, checked, pos) {
 
   const item__dragabblebutton = item.querySelector(".item__dragabblebutton");
   const item__checkbox = item.querySelector(".item__checkbox");
-  const item__label = item.querySelector(".item__label");
+  // const item__label = item.querySelector(".item__label");
   const item__input = item.querySelector(".item__input");
   // Actions
-  const item__edit = item.querySelector(".item__edit");
+  // const item__edit = item.querySelector(".item__edit");
   const item__delete = item.querySelector(".item__delete");
   const item__moveup = item.querySelector(".item__moveup");
   const item__movedown = item.querySelector(".item__movedown");
@@ -353,8 +349,6 @@ function CreateNewItem(content, checked, pos) {
     item__checkbox.setAttribute("checked", "");
   }
 
-  item__label.setAttribute("for", identifier);
-  item__label.textContent = content;
   item__input.value = content;
 
   if (!isMobile) {
@@ -378,26 +372,26 @@ function CreateNewItem(content, checked, pos) {
     });
   }
 
-  item__edit.addEventListener("click", () => {
-    EditItem(item);
+  item__input.addEventListener("keyup", (e) => {
+    if (e.key == "Tab") return;
 
-    item__input.focus();
-  });
+    clearTimeout(timeouttosave);
 
-  item__label.addEventListener("dblclick", (e) => {
-    EditItem(item);
+    if (!item.hasAttribute("data-editing")) {
+      Disable(item__dragabblebutton, false);
+      Disable(item__delete, false);
+      Disable(item__moveup, false);
+      Disable(item__movedown, false);
 
-    item__input.focus();
-  });
+      item.setAttribute("data-editing", "");
+    }
 
-  item__input.addEventListener("keydown", (e) => {
-    if (e.key != "Enter" && e.key != "Escape") return;
+    timeouttosave = setTimeout(() => {
+      SaveItem(item);
+    }, 1000);
 
     if (e.key == "Enter") {
-      EditItem(item);
-    } else {
-      item__input.value = item__label.textContent;
-      EditItem(item);
+      SaveItem(item);
     }
   });
 
@@ -452,53 +446,25 @@ function CreateNewItem(content, checked, pos) {
   UpdateProgressBar();
 }
 
-function EditItem(item) {
+function SaveItem(item) {
+  console.log("save");
+
   const item__dragabblebutton = item.querySelector(".item__dragabblebutton");
-  // const item__checkbox = item.querySelector(".item__checkbox");
-  const item__label = item.querySelector(".item__label");
   const item__input = item.querySelector(".item__input");
-  // Actions
-  const item__edit = item.querySelector(".item__edit");
   const item__delete = item.querySelector(".item__delete");
   const item__moveup = item.querySelector(".item__moveup");
   const item__movedown = item.querySelector(".item__movedown");
 
   if (item.hasAttribute("data-editing")) {
-    Enable(item__label);
-    Disable(item__input);
-
     Enable(item__dragabblebutton);
     Enable(item__delete);
     Enable(item__moveup);
     Enable(item__movedown);
 
     item.removeAttribute("data-editing");
-    item__edit.classList.remove("save");
-    // Finished editing save
-    item__label.textContent = item__input.value;
 
-    // const posarray = item.querySelector(".item").dataset.id;
-    const posarray = item.dataset.id;
-    lists[listId].items[posarray][0] = item__input.value;
+    lists[listId].items[item.dataset.id][0] = item__input.value;
     SaveData();
-
-    // console.log(item);
-    // console.log(posarray);
-    // console.log(listId);
-  } else {
-    Disable(item__label);
-    Enable(item__input);
-
-    Disable(item__dragabblebutton, false);
-    Disable(item__delete, false);
-    Disable(item__moveup, false);
-    Disable(item__movedown, false);
-
-    item.setAttribute("data-editing", "");
-    item__edit.classList.add("save");
-    // Started editing load label value
-    item__input.value = item__label.textContent;
-    item__input.select();
   }
 }
 
