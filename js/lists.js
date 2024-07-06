@@ -6,6 +6,13 @@ const itemTemplate = document.querySelector("#itemTemplate");
 const cards = document.querySelector("#cards");
 const cardTemplate = document.querySelector("#cardTemplate");
 const loadingSpinner = document.querySelector("#loadingSpinner");
+const item__actions = document.querySelector("#item__actions");
+const item__actions__delete = document.querySelector(".item__actions__delete");
+const item__actions__moveup = document.querySelector(".item__actions__moveup");
+const item__actions__movedown = document.querySelector(".item__actions__movedown");
+let isMobileDragging = false;
+
+Disable(item__actions);
 
 let progressDone = "";
 let currentPercentage = 0;
@@ -58,21 +65,7 @@ function TryCreateNewItem() {
 const gotomenubutton = document.querySelector("#gotomenubutton");
 
 gotomenubutton.addEventListener("click", () => {
-  let editingACard = false;
-  let childs = [...list__items.children];
-
-  for (let i = 0; i < childs.length - 1; i++) {
-    const child = childs[i];
-
-    if (child.dataset.editing != "") continue;
-    SaveItem(childs[i]);
-    editingACard = true;
-  }
-
-  if (editingACard) {
-    clearTimeout(timeouttosave);
-  }
-
+  clearTimeout(timeouttosave);
   window.location.hash = "#";
   UpdateMenuCards();
 });
@@ -95,6 +88,13 @@ let timeouttosave = "";
 if (isMobile) {
   window.addEventListener("touchstart", (e) => {
     StartTouching(e.touches[0].clientX, e.touches[0].target, e);
+
+    if (
+      item__actions.ariaDisabled == null &&
+      !e.touches[0].target.classList.contains("item__actions")
+    ) {
+      HideItemActions();
+    }
   });
 
   window.addEventListener("touchend", (e) => {
@@ -109,6 +109,10 @@ if (isMobile) {
 } else {
   window.addEventListener("mousedown", (e) => {
     StartTouching(e.clientX, e.target);
+
+    if (item__actions.ariaDisabled == null && !e.target.classList.contains("item__actions")) {
+      HideItemActions();
+    }
   });
 
   window.addEventListener("mouseup", (e) => {
@@ -128,10 +132,14 @@ function StartTouching(x, target, e = null) {
         // console.warn("STARTTOUCHING"); // [tag:itemdrag]
         const item = target.parentElement;
         const pos = Number(item.dataset.id);
+
         StartDragging(item, e, e.touches[0].clientX, e.touches[0].clientY);
         document.body.style.overflow = "hidden";
-
         window.addEventListener("touchmove", BodyTouchmove);
+
+        setTimeout(() => {
+          if (isMobileDragging) return;
+        }, 200);
       }
       return;
     }
@@ -325,23 +333,17 @@ function ShowList() {
 
 function CreateNewItem(content, checked, pos) {
   let templateContent = itemTemplate.content;
-  // let item = templateContent.querySelector(".itemDiv").cloneNode(true);
   const item = templateContent.querySelector(".item").cloneNode(true);
 
-  // item.querySelector(".item").setAttribute("data-id", pos);
   item.setAttribute("data-id", pos);
 
   let identifier = `item${pos}`;
 
   const item__dragabblebutton = item.querySelector(".item__dragabblebutton");
   const item__checkbox = item.querySelector(".item__checkbox");
-  // const item__label = item.querySelector(".item__label");
   const item__input = item.querySelector(".item__input");
-  // Actions
-  // const item__edit = item.querySelector(".item__edit");
-  const item__delete = item.querySelector(".item__delete");
-  const item__moveup = item.querySelector(".item__moveup");
-  const item__movedown = item.querySelector(".item__movedown");
+  // const item__moveup = item.querySelector(".item__moveup");
+  // const item__movedown = item.querySelector(".item__movedown");
 
   item__checkbox.setAttribute("name", identifier);
   item__checkbox.setAttribute("id", identifier);
@@ -351,14 +353,43 @@ function CreateNewItem(content, checked, pos) {
 
   item__input.value = content;
 
+  item__dragabblebutton.addEventListener("click", (e) => {
+    let isTrusted = e.isTrusted;
+    Enable(item__actions);
+    item__actions.setAttribute("data-id", item.dataset.id);
+
+    PositionItemActions(
+      document.querySelector(`[data-id='${item__actions.dataset.id}'] > .item__dragabblebutton `)
+    );
+
+    if (isTrusted) {
+      item__actions__delete.focus();
+    }
+
+    item__actions__delete.onclick = () => {
+      DeleteItem(item.dataset.id, item__input.value);
+    };
+
+    Enable(item__actions__movedown, false);
+    Enable(item__actions__moveup, false);
+
+    if (pos == 0) {
+      Disable(item__actions__moveup, false);
+      if (!isTrusted) item__actions__movedown.focus();
+    } else if (pos == lists[listId].items.length - 1) {
+      Disable(item__actions__movedown, false);
+      if (!isTrusted) item__actions__moveup.focus();
+    }
+
+    item__actions__moveup.onclick = () => {
+      MoveItem(Number(item.dataset.id), -1);
+    };
+    item__actions__movedown.onclick = () => {
+      MoveItem(Number(item.dataset.id), 1);
+    };
+  });
+
   if (!isMobile) {
-    // item__dragabblebutton.addEventListener("touchstart", (e) => {
-    //   let touch = e.touches[0];
-    //   StartDragging(item, e, touch.clientX, touch.clientY);
-    //   document.body.style.overflow = "hidden";
-    //   document.body.addEventListener("touchmove", BodyTouchmove(item, e, pos));
-    //   document.body.addEventListener("touchend", BodyTouchend(item, e, pos));
-    // });
     item.addEventListener("dragstart", (e) => {
       StartDragging(item, e, e.clientX, e.clientY);
     });
@@ -379,10 +410,6 @@ function CreateNewItem(content, checked, pos) {
 
     if (!item.hasAttribute("data-editing")) {
       Disable(item__dragabblebutton, false);
-      Disable(item__delete, false);
-      Disable(item__moveup, false);
-      Disable(item__movedown, false);
-
       item.setAttribute("data-editing", "");
     }
 
@@ -395,15 +422,8 @@ function CreateNewItem(content, checked, pos) {
     }
   });
 
-  item__delete.addEventListener("click", () => {
-    let ConfirmDelete = confirm(`Do really want to delete this card? [${item__label.textContent}]`);
-    if (!ConfirmDelete) return;
-
-    lists[listId].items.splice(pos, 1);
-    SaveData();
-
-    Disable(item);
-    ShowList();
+  item__input.addEventListener("blur", (e) => {
+    SaveItem(item);
   });
 
   item__checkbox.addEventListener("click", () => {
@@ -413,37 +433,49 @@ function CreateNewItem(content, checked, pos) {
     UpdateProgressBar();
   });
 
-  if (pos == 0) {
-    Disable(item__moveup, false);
-  } else {
-    item__moveup.addEventListener("click", () => {
-      if (pos == 0) return;
-
-      let temp = lists[listId].items[pos - 1];
-      lists[listId].items[pos - 1] = lists[listId].items[pos];
-      lists[listId].items[pos] = temp;
-      SaveData();
-      ShowList();
-    });
-  }
-
-  if (pos == lists[listId].items.length - 1) {
-    Disable(item__movedown, false);
-  } else {
-    item__movedown.addEventListener("click", () => {
-      if (pos >= lists[listId].items.length - 1) return;
-
-      let temp = lists[listId].items[pos + 1];
-      lists[listId].items[pos + 1] = lists[listId].items[pos];
-      lists[listId].items[pos] = temp;
-      SaveData();
-      ShowList();
-    });
-  }
-
   list__items.insertBefore(item, addNewItem);
 
   UpdateProgressBar();
+}
+
+function DeleteItem(pos, text) {
+  let ConfirmDelete = confirm(`Do really want to delete this card? [${text}]`);
+  if (!ConfirmDelete) return;
+  Disable(item__actions);
+
+  lists[listId].items.splice(pos, 1);
+  SaveData();
+  ShowList();
+}
+
+function MoveItem(pos, direction) {
+  if (direction == -1) {
+    if (pos == 0) return;
+  } else if (direction == 1) {
+    if (pos >= lists[listId].items.length - 1) return;
+  } else {
+    return;
+  }
+
+  let temp = lists[listId].items[pos + direction];
+
+  console.log("pos", pos);
+  console.log("direction", direction);
+  console.log("current", lists[listId].items[pos]);
+  console.log("temp", temp);
+
+  lists[listId].items[pos + direction] = lists[listId].items[pos];
+  lists[listId].items[pos] = temp;
+  SaveData();
+  ShowList();
+
+  let item__dragabblebutton = document.querySelector(
+    `[data-id='${pos + direction}'] > .item__dragabblebutton `
+  );
+
+  item__dragabblebutton.click();
+
+  PositionItemActions(item__dragabblebutton);
 }
 
 function SaveItem(item) {
@@ -451,21 +483,43 @@ function SaveItem(item) {
 
   const item__dragabblebutton = item.querySelector(".item__dragabblebutton");
   const item__input = item.querySelector(".item__input");
-  const item__delete = item.querySelector(".item__delete");
-  const item__moveup = item.querySelector(".item__moveup");
-  const item__movedown = item.querySelector(".item__movedown");
 
   if (item.hasAttribute("data-editing")) {
     Enable(item__dragabblebutton);
-    Enable(item__delete);
-    Enable(item__moveup);
-    Enable(item__movedown);
 
     item.removeAttribute("data-editing");
 
     lists[listId].items[item.dataset.id][0] = item__input.value;
     SaveData();
   }
+}
+
+function PositionItemActions(item__dragabblebutton, isTrusted) {
+  item__dragabblebutton.setAttribute("data-actions__preview", "");
+
+  let boundActions = item__actions.getBoundingClientRect();
+  let bound = item__dragabblebutton.getBoundingClientRect();
+  // let x = bound.x + bound.width + 8;
+  // let y = bound.y - 4 + window.scrollY;
+  let x = bound.x;
+  let y = bound.y + bound.height + 4 + window.scrollY;
+
+  if (bound.x > boundActions.width + 16) {
+    x = bound.x - boundActions.width - 16;
+    y = bound.y - 4 + window.scrollY;
+  }
+
+  item__actions.style.left = `${x}px`;
+  item__actions.style.top = `${y}px`;
+}
+
+function HideItemActions() {
+  Disable(item__actions);
+  const item__dragabblebutton = document.querySelector(
+    `[data-id='${item__actions.dataset.id}'] > .item__dragabblebutton`
+  );
+  item__dragabblebutton.removeAttribute("data-actions__preview");
+  item__dragabblebutton.focus();
 }
 
 // Progress Bar
@@ -569,6 +623,8 @@ function StartDragging(item, e, clientX, clientY) {
 }
 
 function Dragging(item, clientY, pos) {
+  isMobileDragging = true;
+
   // console.log(`Dragging(item, ${clientY}, ${pos})`);
   let x = bound.x;
   let y = clientY + window.scrollY - diff.y;
@@ -604,8 +660,8 @@ function Dragging(item, clientY, pos) {
   }
 }
 
-function EndDragging(item, clientY, pos) {
-  console.log("EndDragging"); // [tag:itemdrag]
+function EndDragging(item, clientY, pos, animate = true) {
+  // console.log("EndDragging"); // [tag:itemdrag]
   let save = true;
   item.classList.remove("dragging");
 
@@ -617,6 +673,23 @@ function EndDragging(item, clientY, pos) {
   if (frompoint == null || frompoint.classList[0] != "item") {
     save = false;
     console.log("%cNONE FOUND", "padding: 0.5em; background: hsla(0, 100%, 50%, 0.2)");
+  }
+
+  let dragabblebuttons = [...list__items.querySelectorAll(".item__dragabblebutton")];
+
+  if (!isMobileDragging) {
+    if (currentPreviewItem != null) {
+      currentPreviewItem.remove();
+      currentPreviewItem = null;
+    }
+
+    dragabblebuttons.forEach((drag) => {
+      Enable(drag, false);
+    });
+
+    isMobileDragging = false;
+    window.removeEventListener("touchmove", TouchMoved);
+    return;
   }
 
   let wantedpos = null;
@@ -638,8 +711,8 @@ function EndDragging(item, clientY, pos) {
 
     child.setAttribute("data-id", i);
     let checkbox = child.querySelector(".item__checkbox").checked;
-    let label = child.querySelector(".item__label").textContent;
-    lists[listId].items[i] = [label, checkbox];
+    let input = child.querySelector(".item__input").value;
+    lists[listId].items[i] = [input, checkbox];
   }
 
   if (save) {
@@ -654,7 +727,6 @@ function EndDragging(item, clientY, pos) {
 
   currentPreviewItem.style.transition = "top 0.5s ease-out, opacity 0.5s ease-out 0.5s";
 
-  let dragabblebuttons = [...list__items.querySelectorAll(".item__dragabblebutton")];
   dragabblebuttons.forEach((drag) => {
     Disable(drag, false);
   });
@@ -690,6 +762,7 @@ function BodyTouchend(e) {
   let hangedTouches = e.changedTouches[0];
   const item = hangedTouches.target.parentElement;
   const pos = Number(item.dataset.id);
+  isMobileDragging = false;
 
   EndDragging(item, hangedTouches.clientY, pos);
   document.body.style.overflow = "";

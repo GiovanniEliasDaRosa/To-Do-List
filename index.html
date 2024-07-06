@@ -98,13 +98,14 @@
         <button class="item__dragabblebutton icons nomargin grip"></button>
         <input class="item__checkbox" type="checkbox" name="undefined" id="undefined" />
         <input class="item__input" type="text" name="iteminput" />
-        <div class="item__actions">
-          <button class="item__delete square icons nomargin trash"></button>
-          <button class="item__moveup square icons nomargin up"></button>
-          <button class="item__movedown square icons nomargin down"></button>
-        </div>
       </div>
     </template>
+
+    <div id="item__actions" class="item__actions" data-id="0">
+      <button class="item__actions item__actions__delete icons trash">Delete</button>
+      <button class="item__actions item__actions__moveup icons up">Move up</button>
+      <button class="item__actions item__actions__movedown icons down">Move down</button>
+    </div>
 
     <template id="configMenuLists__itemTemplate">
       <div class="cards__config" data-id="none">

@@ -28,11 +28,23 @@ window.onkeyup = (e) => {
     }
   });
 
+  if (item__actions.ariaDisabled == null) {
+    HideItemActions();
+  }
+
   if (openScreen == null) {
     return;
   }
 
   openScreen.click();
+};
+
+window.onresize = () => {
+  if (item__actions.ariaDisabled == null) {
+    PositionItemActions(
+      document.querySelector(`[data-id='${item__actions.dataset.id}'] > .item__dragabblebutton `)
+    );
+  }
 };
 
 // Add New List
