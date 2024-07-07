@@ -58,7 +58,9 @@ function UpdateScreen() {
 
 function EnableMenu() {
   document.title = "To Do List";
-  Disable(lists__sidebar);
+  if (!lockedsidebar) {
+    Disable(lists__sidebar);
+  }
   Disable(lists__sidebar__dark);
 
   EnableMenuInterval();

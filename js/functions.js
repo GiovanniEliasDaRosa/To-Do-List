@@ -30,6 +30,17 @@ function SaveData() {
 }
 
 function LoadData() {
+  let lockedsidebargot = localStorage.getItem("lockedsidebar");
+
+  if (lockedsidebargot != null) {
+    lockedsidebar = lockedsidebargot == "true" ? true : false;
+    if (lockedsidebar) {
+      lockedsidebar = false;
+      Enable(lists__sidebar);
+      lockSideBar.click();
+    }
+  }
+
   let listgot = localStorage.getItem("lists");
 
   if (listgot == null) return;

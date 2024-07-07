@@ -80,3 +80,10 @@
   content: "\f0c5";
   font-weight: 600;
 }
+
+.icons.lock::before {
+  content: "\f023";
+}
+.icons.lockopen::before {
+  content: "\f3c1";
+}

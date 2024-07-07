@@ -14,6 +14,10 @@ const screen__div__actions__close = [...document.querySelectorAll(".screen__div_
 screen__div__actions__close.forEach((closeButton) => {
   closeButton.addEventListener("click", () => {
     Disable(closeButton.parentElement.parentElement.parentElement.parentElement);
+
+    if (closeButton.id == "configureListMenuDiv__CloseButton") {
+      openConfigCurrentList.focus();
+    }
   });
 });
 
@@ -56,8 +60,9 @@ const addNewListMenu__description = document.querySelector("#addNewListMenu__des
 const configMenu__CreateButton = document.querySelector("#configMenu__CreateButton");
 
 configMenu__CreateButton.addEventListener("click", () => {
-  if (TestIsEmpty(addNewListMenu__name.value)) return;
-  if (TestIsEmpty(addNewListMenu__description.value)) return;
+  if (!ValueIsValid(addNewListMenu__name, configMenu__CreateButton)) return;
+  if (!ValueIsValid(addNewListMenu__description, configMenu__CreateButton)) return;
+
   let newlist = {
     name: addNewListMenu__name.value.trim(),
     description: addNewListMenu__description.value.trim(),
@@ -79,24 +84,38 @@ addNewListButton.addEventListener("click", () => {
 
 // Save the editing list
 configureListMenuDiv__SaveButton.addEventListener("click", () => {
-  if (TestIsEmpty(configureListMenuDiv__name.value)) return;
-  if (TestIsEmpty(configureListMenuDiv__description.value)) return;
+  if (!ValueIsValid(configureListMenuDiv__name, configureListMenuDiv__SaveButton)) return;
+  if (!ValueIsValid(configureListMenuDiv__description, configureListMenuDiv__SaveButton)) return;
 
-  lists[listId].name = configureListMenuDiv__name.value;
-  lists[listId].description = configureListMenuDiv__description.value;
+  lists[listId].name = configureListMenuDiv__name.value.trim();
+  lists[listId].description = configureListMenuDiv__description.value.trim();
 
   // Enable to save listlast edit on editing the title or description of the list
   // lists[listId].lastedit = NewDateAndTime();
 
   Disable(configCurrentListMenu);
 
-  window.location.hash = `#${configureListMenuDiv__name.value}`;
+  window.location.hash = `#${configureListMenuDiv__name.value.trim()}`;
 
   SaveData();
 
   UpdateMenuCards();
   UpdateScreen();
 });
+
+function ValueIsValid(element, button) {
+  if (TestIsEmpty(element.value)) {
+    element.setAttribute("data-error", "");
+    Disable(button, false);
+    setTimeout(() => {
+      Enable(button);
+      button.focus();
+      element.removeAttribute("data-error");
+    }, 1000);
+    return false;
+  }
+  return true;
+}
 
 // Updates on Lists
 function UpdateMenuCards() {
@@ -109,8 +128,17 @@ function UpdateMenuCards() {
 
   for (let i = 0; i < lists.length; i++) {
     const currentList = lists[i];
+    let checked = 0;
+    let quant = 0;
 
-    CreateNewList(currentList.name, currentList.description, currentList.lastedit);
+    for (let j = 0; j < currentList.items.length; j++) {
+      quant++;
+      if (currentList.items[j][1] == true) {
+        checked++;
+      }
+    }
+
+    CreateNewList(currentList.name, currentList.description, currentList.lastedit, checked, quant);
     CreateNewConfigMenuItem(currentList.name, i);
   }
 
@@ -122,7 +150,7 @@ function UpdateMenuCards() {
   }, 2000);
 }
 
-function CreateNewList(name, description, lastedit) {
+function CreateNewList(name, description, lastedit, checked, quant) {
   let templateContent = cardTemplate.content;
   let card = templateContent.querySelector(".card").cloneNode(true);
 
@@ -130,6 +158,14 @@ function CreateNewList(name, description, lastedit) {
 
   card.querySelector(".card__description").textContent = description;
   card.querySelector(".card__editTime").textContent = `Edited in: ${lastedit}`;
+
+  console.log(name);
+  console.log(checked);
+  console.log(quant);
+
+  let percentage = Math.round((checked / quant) * 100);
+  card.querySelector(".card__progress__fill").style.width = `${percentage}%`;
+  card.querySelector(".card__progress__text").textContent = `${checked}/${quant} (${percentage}%)`;
 
   card.href = `#${name}`;
 

@@ -80,10 +80,12 @@ const openSideBar = document.querySelector("#openSideBar");
 const closeSideBar = document.querySelector("#closeSideBar");
 const lists__sidebar = document.querySelector("#lists__sidebar");
 const lists__sidebar__dark = document.querySelector("#lists__sidebar__dark");
+const lockSideBar = document.querySelector("#lockSideBar");
 let startSideBarPosX = 0;
 let sideBarPosX = 0;
 let sideBarIsOpen = false;
 let timeouttosave = "";
+let lockedsidebar = false;
 
 if (isMobile) {
   window.addEventListener("touchstart", (e) => {
@@ -122,6 +124,7 @@ if (isMobile) {
 
 function StartTouching(x, target, e = null) {
   if (listId == null) return;
+  if (lockedsidebar) return;
 
   if (target != null) {
     if (target.classList[0] == "item__dragabblebutton") {
@@ -167,6 +170,7 @@ function StartTouching(x, target, e = null) {
 
 function EndTouching(x, target) {
   if (listId == null) return;
+  if (lockedsidebar) return;
 
   if (document.querySelector(".item.dragging") != null) return;
 
@@ -185,7 +189,7 @@ function EndTouching(x, target) {
   sideBarIsOpen = false;
   let disable = false;
 
-  if (target == "lists__sidebar" && Math.abs(difference) < 4) return;
+  if ((target == "lists__sidebar" || target == "lockSideBar") && Math.abs(difference) < 4) return;
 
   document.body.removeAttribute("data-user-dont-select");
   lists__sidebar.classList.add("animate");
@@ -206,7 +210,8 @@ function EndTouching(x, target) {
   lists__sidebar.style.transform = `TranslateX(${calc}%)`;
   lists__sidebar__dark.style.opacity = calc / 100 + 1;
 
-  if (target == "openSideBar") {
+  console.log(lockedsidebar);
+  if (target == "openSideBar" || lockedsidebar) {
     calc = 0;
     sideBarIsOpen = true;
     disable = false;
@@ -215,6 +220,9 @@ function EndTouching(x, target) {
     sideBarIsOpen = false;
     disable = true;
   }
+
+  console.log("sideBarIsOpen", sideBarIsOpen);
+  console.log("disable", disable);
 
   setTimeout(() => {
     lists__sidebar.style.transform = `TranslateX(${calc}%)`;
@@ -245,7 +253,10 @@ function MouseMoved(e) {
   // if (Math.abs(difference) > 10)
 
   Enable(lists__sidebar);
-  Enable(lists__sidebar__dark);
+
+  if (!lockedsidebar) {
+    Enable(lists__sidebar__dark);
+  }
 
   UpdateSideBar();
 }
@@ -257,7 +268,9 @@ function TouchMoved(e) {
 
   if (Math.abs(difference) > 20) {
     Enable(lists__sidebar);
-    Enable(lists__sidebar__dark);
+    if (!lockedsidebar) {
+      Enable(lists__sidebar__dark);
+    }
   }
 
   UpdateSideBar();
@@ -287,6 +300,30 @@ closeSideBar.addEventListener("click", () => {
   EndTouching(0, "closeSideBar");
 
   openSideBar.focus();
+});
+
+lockSideBar.addEventListener("click", () => {
+  if (!lockedsidebar) {
+    console.log("lock");
+    Disable(openSideBar);
+    Disable(closeSideBar);
+    lists__sidebar.setAttribute("data-pinned", "");
+    lockSideBar.classList.remove("lockopen");
+    lockedsidebar = true;
+    EndTouching(0, null);
+    Disable(lists__sidebar__dark);
+    lists__sidebar.style.transform = "";
+    lists__sidebar__dark.style.opacity = "";
+  } else {
+    console.log("unlock");
+    Enable(openSideBar);
+    Enable(closeSideBar);
+    lists__sidebar.removeAttribute("data-pinned");
+    lockSideBar.classList.add("lockopen");
+    lockedsidebar = false;
+  }
+
+  localStorage.setItem("lockedsidebar", lockedsidebar);
 });
 
 // Show Items from current List
@@ -778,6 +815,7 @@ const configureListMenuDiv__name = document.querySelector("#configureListMenuDiv
 const configureListMenuDiv__description = document.querySelector(
   "#configureListMenuDiv__description"
 );
+
 const configureListMenuDiv__SaveButton = document.querySelector(
   "#configureListMenuDiv__SaveButton"
 );
@@ -796,6 +834,7 @@ const exportListMenu = document.querySelector("#exportListMenu");
 const configureListMenuDiv__ExportButton = document.querySelector(
   "#configureListMenuDiv__ExportButton"
 );
+
 configureListMenuDiv__ExportButton.addEventListener("click", () => {
   ExportData();
 });

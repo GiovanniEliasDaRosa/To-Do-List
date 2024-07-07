@@ -24,6 +24,15 @@
   gap: 1em;
 }
 
+#lists__sidebar[data-pinned] {
+  background: transparent;
+  pointer-events: none;
+}
+
+#lists__sidebar[data-pinned] > * {
+  pointer-events: all;
+}
+
 #lists__sidebar__dark {
   position: fixed;
   top: 0;
@@ -45,6 +54,10 @@
   font-size: 1rem;
 }
 
-#openConfigCurrentList {
+#lockSideBar {
   margin-top: auto;
 }
+
+/* #openConfigCurrentList {
+  margin-top: auto;
+} */

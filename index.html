@@ -47,6 +47,25 @@
 
     <div id="list">
       <button class="icons nomargin square bars" id="openSideBar"></button>
+
+      <div id="lists__sidebar">
+        <button class="lists__sidebar__items icons nomargin xmark" id="closeSideBar"></button>
+        <button
+          class="buttons lists__sidebar__items square icons nomargin home"
+          id="gotomenubutton"
+        ></button>
+        <button
+          class="lists__sidebar__items icons nomargin lock lockopen"
+          id="lockSideBar"
+          title="open config menu"
+        ></button>
+        <button
+          class="lists__sidebar__items icons nomargin gear"
+          id="openConfigCurrentList"
+          title="open config menu"
+        ></button>
+      </div>
+
       <h1 id="list__title__h1">
         <span id="list__listspan">List:</span> <span id="list__name">[]</span>
       </h1>
@@ -58,19 +77,6 @@
         </div>
       </div>
 
-      <div id="lists__sidebar">
-        <button class="lists__sidebar__items icons nomargin xmark" id="closeSideBar"></button>
-        <button
-          class="buttons lists__sidebar__items square icons nomargin home"
-          id="gotomenubutton"
-        ></button>
-
-        <button
-          class="lists__sidebar__items icons nomargin gear"
-          id="openConfigCurrentList"
-          title="open config menu"
-        ></button>
-      </div>
       <div id="lists__sidebar__dark"></div>
 
       <div id="progressbar__div">
@@ -88,8 +94,14 @@
           Lorem, ipsum dolor sit amet consectetur adipisicing elit. Vero animi quis sed nostrum
           aperiam?
         </p>
-        <p class="card__editTime">Edited in: DD/MM/YYYY | hh:mm:ss</p>
-        <p class="card__lastEdit">Last Edit: Undefined</p>
+        <div class="card__infos">
+          <div class="card__progress">
+            <div class="card__progress__fill"></div>
+            <div class="card__progress__text">99/99 (100%)</div>
+          </div>
+          <p class="card__editTime">Edited in: DD/MM/YYYY | hh:mm:ss</p>
+          <p class="card__lastEdit">Last Edit: Undefined</p>
+        </div>
       </a>
     </template>
 
@@ -305,7 +317,10 @@
             </button>
           </div>
           <div class="screen__div__actions__right flex">
-            <button class="screen__div__actions__close screen__div__actions__close__button">
+            <button
+              class="screen__div__actions__close screen__div__actions__close__button"
+              id="configureListMenuDiv__CloseButton"
+            >
               Cancel
             </button>
             <button id="configureListMenuDiv__SaveButton">Save</button>
