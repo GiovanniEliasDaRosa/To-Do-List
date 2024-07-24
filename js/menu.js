@@ -97,6 +97,8 @@ configureListMenuDiv__SaveButton.addEventListener("click", () => {
 
   window.location.hash = `#${configureListMenuDiv__name.value.trim()}`;
 
+  currentList.autouncheck = configureListMenuDiv__autoUncheck.checked;
+
   SaveData();
 
   UpdateMenuCards();
@@ -126,6 +128,8 @@ function UpdateMenuCards() {
 
   configMenuLists.innerHTML = "";
 
+  let saveLists = [];
+
   for (let i = 0; i < lists.length; i++) {
     const currentList = lists[i];
     let checked = 0;
@@ -138,8 +142,20 @@ function UpdateMenuCards() {
       }
     }
 
-    CreateNewList(currentList.name, currentList.description, currentList.lastedit, checked, quant);
+    let updateTime = CreateNewList(
+      currentList.name,
+      currentList.description,
+      currentList.lastedit,
+      checked,
+      quant
+    );
     CreateNewConfigMenuItem(currentList.name, i);
+    if (updateTime && currentList.autouncheck) {
+      saveLists.push(i);
+      for (let j = 0; j < currentList.items.length; j++) {
+        lists[i].items[j][1] = false;
+      }
+    }
   }
 
   clearTimeout(updatingMenuTimeout);
@@ -148,6 +164,16 @@ function UpdateMenuCards() {
   updatingMenuTimeout = setTimeout(() => {
     Disable(loadingSpinner);
   }, 2000);
+
+  saveLists.forEach((listToSave) => {
+    listId = listToSave;
+    SaveData();
+  });
+
+  if (saveLists.length != 0) {
+    console.log("Reload Screen");
+    UpdateMenuCards();
+  }
 }
 
 function CreateNewList(name, description, lastedit, checked, quant) {
@@ -159,9 +185,9 @@ function CreateNewList(name, description, lastedit, checked, quant) {
   card.querySelector(".card__description").textContent = description;
   card.querySelector(".card__editTime").textContent = `Edited in: ${lastedit}`;
 
-  console.log(name);
-  console.log(checked);
-  console.log(quant);
+  // console.log(name);
+  // console.log(checked);
+  // console.log(quant);
 
   let percentage = Math.round((checked / quant) * 100);
   card.querySelector(".card__progress__fill").style.width = `${percentage}%`;
@@ -210,6 +236,11 @@ function CreateNewList(name, description, lastedit, checked, quant) {
 
   card.querySelector(".card__lastEdit").textContent = `Last Edit: ${edittime}`;
   cards.insertBefore(card, addNewListButton);
+
+  if (yearDifference != 0 || monthDifference != 0 || dayDifference != 0) {
+    return true;
+  }
+  return false;
 }
 
 function CreateNewConfigMenuItem(name, pos) {

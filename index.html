@@ -73,7 +73,11 @@
       <div id="list__items">
         <div id="addNewItem">
           <input id="addNewItem__input" type="text" placeholder="Item name" />
-          <button id="addNewItem__button" class="icons nomargin plus" title="Add new item"></button>
+          <button
+            id="addNewItem__button"
+            class="button square icons nomargin plus"
+            title="Add new item"
+          ></button>
         </div>
       </div>
 
@@ -305,6 +309,16 @@
             rows="3"
             placeholder="Description"
           ></textarea>
+          <div id="configureListMenuDiv__divAutoUncheck">
+            <input
+              type="checkbox"
+              name="configureListMenuDiv__autoUncheck"
+              id="configureListMenuDiv__autoUncheck"
+            />
+            <label for="configureListMenuDiv__autoUncheck"
+              >Uncheck items automatically when list one day or more old</label
+            >
+          </div>
         </div>
 
         <div class="screen__div__actions">

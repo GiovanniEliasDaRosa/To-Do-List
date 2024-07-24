@@ -170,7 +170,9 @@ function StartTouching(x, target, e = null) {
 
 function EndTouching(x, target) {
   if (listId == null) return;
-  if (lockedsidebar) return;
+  if (lockedsidebar) {
+    document.body.removeAttribute("data-user-dont-select");
+  }
 
   if (document.querySelector(".item.dragging") != null) return;
 
@@ -304,7 +306,7 @@ closeSideBar.addEventListener("click", () => {
 
 lockSideBar.addEventListener("click", () => {
   if (!lockedsidebar) {
-    console.log("lock");
+    // console.log("lock");
     Disable(openSideBar);
     Disable(closeSideBar);
     lists__sidebar.setAttribute("data-pinned", "");
@@ -315,7 +317,7 @@ lockSideBar.addEventListener("click", () => {
     lists__sidebar.style.transform = "";
     lists__sidebar__dark.style.opacity = "";
   } else {
-    console.log("unlock");
+    // console.log("unlock");
     Enable(openSideBar);
     Enable(closeSideBar);
     lists__sidebar.removeAttribute("data-pinned");
@@ -815,15 +817,18 @@ const configureListMenuDiv__name = document.querySelector("#configureListMenuDiv
 const configureListMenuDiv__description = document.querySelector(
   "#configureListMenuDiv__description"
 );
-
 const configureListMenuDiv__SaveButton = document.querySelector(
   "#configureListMenuDiv__SaveButton"
+);
+const configureListMenuDiv__autoUncheck = document.querySelector(
+  "#configureListMenuDiv__autoUncheck"
 );
 
 openConfigCurrentList.addEventListener("click", () => {
   currentList = lists[listId];
   configureListMenuDiv__name.value = currentList.name;
   configureListMenuDiv__description.value = currentList.description;
+  configureListMenuDiv__autoUncheck.checked = currentList.autouncheck;
   Enable(configCurrentListMenu);
   configureListMenuDiv__name.focus();
 });

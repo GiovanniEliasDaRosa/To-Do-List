@@ -160,3 +160,12 @@ exportListMenu__clipboard */
 #importListMenu__ImportFileLabel {
   align-self: flex-start;
 }
+
+#configureListMenuDiv__divAutoUncheck {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: auto;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5em;
+}
