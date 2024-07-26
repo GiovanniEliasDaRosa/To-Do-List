@@ -3,6 +3,7 @@
   inset: 0;
   background-color: hsla(0, 0%, 0%, 0.4);
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   z-index: 20;
@@ -19,6 +20,14 @@
   max-height: 100dvh;
   gap: 0.5em;
   width: clamp(min(12em, 100vw), 30em, 100vw);
+}
+
+.screen__div:not(.screehastabs) {
+  grid-template-rows: auto 1fr auto;
+}
+
+.screen__div.screehastabs {
+  grid-template-rows: auto 1fr;
 }
 
 .screen__div :is(input[type="text"], textarea) {
@@ -53,15 +62,6 @@
   100% {
     transform: translateY(100%) scale(0.5);
     opacity: 0;
-  }
-}
-
-/* Responsives */
-@media (max-width: 600px) {
-  .screen__div {
-    height: 100vh;
-    height: 100dvh;
-    width: 100vw;
   }
 }
 
@@ -104,31 +104,6 @@
   gap: 0.5em;
 }
 
-@media (max-width: 600px) {
-  .screen__div__actions {
-    justify-content: space-between;
-    flex-direction: column;
-  }
-  .screen__div__actions__left,
-  .screen__div__actions__right {
-    display: flex;
-    gap: 0.5em;
-  }
-
-  .screen__div__actions button {
-    flex: 0 0 calc(50% - 0.5em / 2);
-  }
-
-  .screen__div__actions button.onlyoone {
-    flex: 0 0 100%;
-  }
-
-  .screen__div__namelabel {
-    flex-direction: column;
-    gap: 0.5em;
-  }
-}
-
 .screen__div__tip {
   color: hsl(0, 0%, 80%);
 }
@@ -161,11 +136,114 @@ exportListMenu__clipboard */
   align-self: flex-start;
 }
 
-#configureListMenuDiv__divAutoUncheck {
+.screen__checkboxdiv {
   display: grid;
   grid-template-columns: auto 1fr;
   grid-template-rows: auto;
   justify-content: center;
   align-items: center;
   gap: 0.5em;
+}
+
+/* tabs */
+
+#screentabsbuttons {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5em;
+  padding: 0.25em;
+  overflow-y: hidden;
+  overflow-x: auto;
+  border-bottom: solid 0.1em hsla(0, 0%, 100%, 0.2);
+}
+
+body:not([data-mobile]) #screentabsbuttons {
+  margin-top: -4.125em;
+  border-bottom: none;
+}
+
+.screentabbuttons {
+  transform: translateY(0.25em);
+  position: relative;
+  isolation: isolate;
+  flex: 0 0 auto;
+}
+
+.screentabbuttons::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-color: hsl(228, 17%, 6%);
+  border-radius: inherit;
+}
+
+.selectedtab {
+  padding-bottom: calc(0.5em + 0.25em);
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+
+  background-color: hsla(0, 0%, 100%, 0.05);
+  border-color: hsla(0, 0%, 100%, 0.5);
+  font-weight: 600;
+}
+
+.selectedtab::after {
+  background-color: hsl(227, 27%, 36%);
+}
+
+/* current tab */
+.screentab {
+  /* padding: 1em;
+  background-color: hsl(228, 17%, 6%);
+  border-radius: 0.5em;
+  border: solid 0.1em hsla(0, 0%, 100%, 0.2); */
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: 0.5em;
+  /* max-height: 100vh;
+  max-height: 100dvh;
+  width: clamp(min(12em, 100vw), 30em, 100vw); */
+}
+
+#globalConfigurationsMenu {
+  box-shadow: 0 0 0 0.5em red;
+}
+
+/* Responsives */
+@media (max-width: 600px) {
+  .screen__div {
+    height: 100vh;
+    height: 100dvh;
+    width: 100vw;
+  }
+
+  .screen__div__actions {
+    justify-content: space-between;
+    flex-direction: column;
+  }
+  .screen__div__actions__left,
+  .screen__div__actions__right {
+    display: flex;
+    gap: 0.5em;
+  }
+
+  .screen__div__actions button {
+    flex: 0 0 calc(50% - 0.5em / 2);
+  }
+
+  .screen__div__actions button.onlyoone {
+    flex: 0 0 100%;
+  }
+
+  .screen__div__namelabel {
+    flex-direction: column;
+    gap: 0.5em;
+  }
+
+  #screentabsbuttons {
+    padding-block: 0;
+    margin-top: 0 !important;
+    border-bottom: solid 0.1em hsla(0, 0%, 100%, 0.2) !important;
+  }
 }

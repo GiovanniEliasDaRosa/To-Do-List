@@ -118,3 +118,14 @@ textarea {
   -webkit-user-select: none;
   user-select: none;
 }
+
+/* data-smallUI */
+[data-smallUI] :is(button.square, .buttons.square) {
+  width: 2em;
+  height: 2em;
+}
+
+[data-smallUI] :is(.lists__sidebar__items, #gotomenubutton) {
+  width: 2rem !important;
+  height: 2rem !important;
+}

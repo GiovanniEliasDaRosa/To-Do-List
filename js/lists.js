@@ -172,6 +172,7 @@ function EndTouching(x, target) {
   if (listId == null) return;
   if (lockedsidebar) {
     document.body.removeAttribute("data-user-dont-select");
+    return;
   }
 
   if (document.querySelector(".item.dragging") != null) return;

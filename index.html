@@ -40,7 +40,11 @@
         </button>
       </div>
 
-      <button class="icons nomargin gear" id="openConfigLists" title="open config menu"></button>
+      <button
+        class="buttons square icons nomargin gear"
+        id="openConfigLists"
+        title="open config menu"
+      ></button>
 
       <p class="icons nomargin spinner" id="loadingSpinner"></p>
     </div>
@@ -131,22 +135,32 @@
     </template>
 
     <div id="configListsMenu" class="screen">
-      <div id="configMenuDiv" class="screen__div">
-        <h1>Configurations</h1>
+      <div id="configMenuDiv" class="screen__div screehastabs">
+        <div id="screentabsbuttons">
+          <button class="buttons icons pencil screentabbuttons selectedtab">
+            List Configutarions
+          </button>
+          <button class="buttons icons gear screentabbuttons" data-tabid="globalConfigurationsMenu">
+            Configurations
+          </button>
+        </div>
+        <div id="configListsMenuMenuTab" class="screentab">
+          <h1>List Configutarions</h1>
 
-        <div class="screen__div__cards" id="configMenuLists"></div>
+          <div class="screen__div__cards" id="configMenuLists"></div>
 
-        <div class="screen__div__actions">
-          <div class="screen__div__actions__left">
-            <button disabled>Import</button>
-            <button disabled>Export</button>
-          </div>
-          <div class="screen__div__actions__right">
-            <button
-              class="screen__div__actions__close screen__div__actions__close__button onlyoone"
-            >
-              Close
-            </button>
+          <div class="screen__div__actions">
+            <div class="screen__div__actions__left">
+              <button disabled>Import</button>
+              <button disabled>Export</button>
+            </div>
+            <div class="screen__div__actions__right">
+              <button
+                class="screen__div__actions__close screen__div__actions__close__button onlyoone"
+              >
+                Close
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -287,57 +301,101 @@
     </div>
 
     <div id="configCurrentListMenu" class="screen">
-      <div id="configureListMenuDiv" class="screen__div">
-        <h1>Edit list</h1>
+      <div id="configureListMenuDiv" class="screen__div screehastabs">
+        <div id="screentabsbuttons">
+          <button class="buttons icons pencil screentabbuttons selectedtab">Edit List</button>
+          <button class="buttons icons gear screentabbuttons" data-tabid="globalConfigurationsMenu">
+            Configurations
+          </button>
+        </div>
+        <div id="configCurrentListMenuTab" class="screentab">
+          <h1>Edit list</h1>
 
-        <div class="screen__div__cards">
-          <label for="configureListMenuDiv__name" class="screen__div__namelabel"
-            >List name:
-            <span class="screen__div__tip">TIP: Recommended max 28 characters</span></label
-          >
-          <input
-            id="configureListMenuDiv__name"
-            class="screen__div__name"
-            type="text"
-            placeholder="Name"
-          />
-          <label for="configureListMenuDiv__description">List description: </label>
-          <textarea
-            id="configureListMenuDiv__description"
-            class="screen__div__textarea"
-            name="configureListMenuDiv__description"
-            rows="3"
-            placeholder="Description"
-          ></textarea>
-          <div id="configureListMenuDiv__divAutoUncheck">
-            <input
-              type="checkbox"
-              name="configureListMenuDiv__autoUncheck"
-              id="configureListMenuDiv__autoUncheck"
-            />
-            <label for="configureListMenuDiv__autoUncheck"
-              >Uncheck items automatically when list one day or more old</label
+          <div class="screen__div__cards">
+            <label for="configureListMenuDiv__name" class="screen__div__namelabel"
+              >List name:
+              <span class="screen__div__tip">TIP: Recommended max 28 characters</span></label
             >
+            <input
+              id="configureListMenuDiv__name"
+              class="screen__div__name"
+              type="text"
+              placeholder="Name"
+            />
+            <label for="configureListMenuDiv__description">List description: </label>
+            <textarea
+              id="configureListMenuDiv__description"
+              class="screen__div__textarea"
+              name="configureListMenuDiv__description"
+              rows="3"
+              placeholder="Description"
+            ></textarea>
+            <div class="screen__checkboxdiv">
+              <input
+                type="checkbox"
+                name="configureListMenuDiv__autoUncheck"
+                id="configureListMenuDiv__autoUncheck"
+              />
+              <label for="configureListMenuDiv__autoUncheck"
+                >Uncheck items automatically when list one day or more old</label
+              >
+            </div>
+          </div>
+
+          <div class="screen__div__actions">
+            <div class="screen__div__actions__left">
+              <button class="screen__div__actions__close" id="configureListMenuDiv__ImportButton">
+                Import
+              </button>
+              <button class="screen__div__actions__close" id="configureListMenuDiv__ExportButton">
+                Export
+              </button>
+            </div>
+            <div class="screen__div__actions__right flex">
+              <button
+                class="screen__div__actions__close screen__div__actions__close__button"
+                id="configureListMenuDiv__CloseButton"
+              >
+                Cancel
+              </button>
+              <button id="configureListMenuDiv__SaveButton">Save</button>
+            </div>
           </div>
         </div>
+      </div>
+    </div>
 
-        <div class="screen__div__actions">
-          <div class="screen__div__actions__left">
-            <button class="screen__div__actions__close" id="configureListMenuDiv__ImportButton">
-              Import
-            </button>
-            <button class="screen__div__actions__close" id="configureListMenuDiv__ExportButton">
-              Export
-            </button>
+    <div id="globalConfigurationsMenu" class="screen">
+      <div id="globalConfigurationsMenuDiv" class="screen__div screehastabs">
+        <div id="screentabsbuttons">
+          <button class="buttons icons pencil screentabbuttons" data-tabid="TAB 1">TAB 1</button>
+          <button class="buttons icons gear screentabbuttons selectedtab">Configurations</button>
+        </div>
+        <div class="screentab">
+          <h1 class="icons globe">Configurations</h1>
+
+          <div class="screen__div__cards">
+            <div id="globalConfigurationsMenuDiv__divSmallUI" class="screen__checkboxdiv">
+              <input
+                type="checkbox"
+                name="globalConfigurationsMenuDiv__smallUI"
+                id="globalConfigurationsMenuDiv__smallUI"
+              />
+              <label for="globalConfigurationsMenuDiv__smallUI">Enable small UI mode</label>
+            </div>
           </div>
-          <div class="screen__div__actions__right flex">
-            <button
-              class="screen__div__actions__close screen__div__actions__close__button"
-              id="configureListMenuDiv__CloseButton"
-            >
-              Cancel
-            </button>
-            <button id="configureListMenuDiv__SaveButton">Save</button>
+
+          <div class="screen__div__actions">
+            <div class="screen__div__actions__left flex">
+              <button
+                class="screen__div__actions__close screen__div__actions__close__button onlyoone"
+              >
+                Cancel
+              </button>
+            </div>
+            <div class="screen__div__actions__right flex">
+              <button class="onlyoone" id="globalConfigurationsMenuDiv__SaveButton">Save</button>
+            </div>
           </div>
         </div>
       </div>

@@ -41,6 +41,13 @@ function LoadData() {
     }
   }
 
+  if (localStorage.getItem("smallUI") != null) {
+    smallUI = localStorage.getItem("smallUI") == "true";
+    if (smallUI) {
+      document.body.setAttribute("data-smallUI", "");
+    }
+  }
+
   let listgot = localStorage.getItem("lists");
 
   if (listgot == null) return;

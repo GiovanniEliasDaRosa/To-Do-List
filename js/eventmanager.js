@@ -5,14 +5,19 @@ const configMenuLists__item = document.querySelector("#configMenuLists__item");
 // Configure the menus
 Enable(menu);
 Disable(list);
-Disable(addNewListMenu);
-Disable(configListsMenu);
-Disable(configCurrentListMenu);
+// Disable(addNewListMenu);
+// Disable(configListsMenu);
+// Disable(configCurrentListMenu);
 Disable(lists__sidebar);
 Disable(lists__sidebar__dark);
-Disable(exportListMenu);
-Disable(importListMenu);
+// Disable(exportListMenu);
+// Disable(importListMenu);
+
+const screen = document.querySelectorAll(".screen");
+screen.forEach((currentScreen) => {
+  Disable(currentScreen);
+});
 
 // setTimeout(() => {
 //   openConfigCurrentList.click();
-// }, 500);
+// }, 200);

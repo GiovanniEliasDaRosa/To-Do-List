@@ -84,6 +84,11 @@
 .icons.lock::before {
   content: "\f023";
 }
+
 .icons.lockopen::before {
   content: "\f3c1";
+}
+
+.icons.globe::before {
+  content: "\f0ac";
 }
