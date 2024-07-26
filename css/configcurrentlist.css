@@ -46,18 +46,6 @@
   transition: 0.2s ease-out;
 }
 
-.lists__sidebar__items,
-#gotomenubutton {
-  width: 3rem !important;
-  height: 3rem !important;
-  padding: 0;
-  font-size: 1rem;
-}
-
 #lockSideBar {
   margin-top: auto;
 }
-
-/* #openConfigCurrentList {
-  margin-top: auto;
-} */

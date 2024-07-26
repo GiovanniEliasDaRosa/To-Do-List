@@ -306,8 +306,11 @@ screentabbuttons.forEach((button) => {
         console.log(thisMenu.id);
         if (thisMenu.id != "globalConfigurationsMenu") {
           screentabbuttonsOnNewMenu[0].setAttribute("data-tabid", thisMenu.id);
-          screentabbuttonsOnNewMenu[0].innerHTML =
-            thisMenu.querySelector(".screentabbuttons").innerHTML;
+          let buttontext = thisMenu.querySelector(".screentabbuttons").innerHTML;
+          let title = "Open " + buttontext.trim();
+          screentabbuttonsOnNewMenu[0].innerHTML = buttontext;
+
+          screentabbuttonsOnNewMenu[0].title = title;
           focusTabPos = 1;
           UpdateMenuGlobalConfigurations();
         }

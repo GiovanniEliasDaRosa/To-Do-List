@@ -120,9 +120,9 @@ textarea {
 }
 
 /* data-smallUI */
-[data-smallUI] :is(button.square, .buttons.square) {
-  width: 2em;
-  height: 2em;
+[data-smallUI] :is(button.square, .buttons.square, button.square__big, .buttons.square__big) {
+  width: 2em !important;
+  height: 2em !important;
 }
 
 [data-smallUI] :is(.lists__sidebar__items, #gotomenubutton) {

@@ -33,6 +33,16 @@ button.square,
   height: 2em;
 }
 
+button.square__big,
+.buttons.square__big {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 3rem !important;
+  height: 3rem !important;
+  padding: 0;
+}
+
 /* warn button red */
 
 button.warn,

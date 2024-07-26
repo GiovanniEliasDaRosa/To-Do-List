@@ -41,32 +41,38 @@
       </div>
 
       <button
-        class="buttons square icons nomargin gear"
+        class="buttons square__big icons nomargin gear"
         id="openConfigLists"
         title="open config menu"
+        title="Open configurations menu"
       ></button>
 
       <p class="icons nomargin spinner" id="loadingSpinner"></p>
     </div>
 
     <div id="list">
-      <button class="icons nomargin square bars" id="openSideBar"></button>
+      <button class="icons nomargin square bars" id="openSideBar" title="Open sidebar"></button>
 
       <div id="lists__sidebar">
-        <button class="lists__sidebar__items icons nomargin xmark" id="closeSideBar"></button>
         <button
-          class="buttons lists__sidebar__items square icons nomargin home"
+          class="buttons lists__sidebar__items square__big icons nomargin xmark"
+          id="closeSideBar"
+          title="Close sidebar"
+        ></button>
+        <button
+          class="buttons lists__sidebar__items square__big icons nomargin home"
           id="gotomenubutton"
+          title="Go to menu"
         ></button>
         <button
-          class="lists__sidebar__items icons nomargin lock lockopen"
+          class="buttons lists__sidebar__items square__big icons nomargin lock lockopen"
           id="lockSideBar"
-          title="open config menu"
+          title="Lock sidebar"
         ></button>
         <button
-          class="lists__sidebar__items icons nomargin gear"
+          class="buttons lists__sidebar__items square__big icons nomargin gear"
           id="openConfigCurrentList"
-          title="open config menu"
+          title="Open config menu"
         ></button>
       </div>
 
@@ -80,7 +86,7 @@
           <button
             id="addNewItem__button"
             class="button square icons nomargin plus"
-            title="Add new item"
+            title="Add new item to curent list"
           ></button>
         </div>
       </div>
@@ -115,22 +121,39 @@
 
     <template id="itemTemplate">
       <div class="item" data-id="0" draggable="true">
-        <button class="item__dragabblebutton icons nomargin grip"></button>
+        <button
+          class="item__dragabblebutton icons nomargin grip"
+          title="Click for options"
+        ></button>
         <input class="item__checkbox" type="checkbox" name="undefined" id="undefined" />
         <input class="item__input" type="text" name="iteminput" />
       </div>
     </template>
 
     <div id="item__actions" class="item__actions" data-id="0">
-      <button class="item__actions item__actions__delete icons trash">Delete</button>
-      <button class="item__actions item__actions__moveup icons up">Move up</button>
-      <button class="item__actions item__actions__movedown icons down">Move down</button>
+      <button class="item__actions item__actions__delete icons trash" title="Click to delete card">
+        Delete
+      </button>
+
+      <button class="item__actions item__actions__moveup icons up" title="Click to move card up">
+        Move up
+      </button>
+
+      <button
+        class="item__actions item__actions__movedown icons down"
+        title="Click to move card down"
+      >
+        Move down
+      </button>
     </div>
 
     <template id="configMenuLists__itemTemplate">
       <div class="cards__config" data-id="none">
         <p class="cards__config__title">[]</p>
-        <button class="cards__config__deleteButton warn icons nomargin trash square"></button>
+        <button
+          class="cards__config__deleteButton warn icons nomargin trash square"
+          title="Delete this list"
+        ></button>
       </div>
     </template>
 
@@ -138,9 +161,13 @@
       <div id="configMenuDiv" class="screen__div screehastabs">
         <div id="screentabsbuttons">
           <button class="buttons icons pencil screentabbuttons selectedtab">
-            List Configutarions
+            List Configurations
           </button>
-          <button class="buttons icons gear screentabbuttons" data-tabid="globalConfigurationsMenu">
+          <button
+            class="buttons icons gear screentabbuttons"
+            data-tabid="globalConfigurationsMenu"
+            title="Open global configurations"
+          >
             Configurations
           </button>
         </div>
@@ -151,12 +178,13 @@
 
           <div class="screen__div__actions">
             <div class="screen__div__actions__left">
-              <button disabled>Import</button>
-              <button disabled>Export</button>
+              <button title="Import all lists" disabled>Import</button>
+              <button title="Export all lists" disabled>Export</button>
             </div>
             <div class="screen__div__actions__right">
               <button
                 class="screen__div__actions__close screen__div__actions__close__button onlyoone"
+                title="Close"
               >
                 Close
               </button>
@@ -198,10 +226,13 @@
             </p>
           </div>
           <div class="screen__div__actions__right flex">
-            <button class="screen__div__actions__close screen__div__actions__close__button">
+            <button
+              class="screen__div__actions__close screen__div__actions__close__button"
+              title="Cancel"
+            >
               Cancel
             </button>
-            <button id="configMenu__CreateButton">Create</button>
+            <button id="configMenu__CreateButton" title="Create new list">Create</button>
           </div>
         </div>
       </div>
@@ -217,6 +248,7 @@
             <button
               class="square icons nomargin clipboard"
               id="exportListMenu__ClipboardButtton"
+              title="Copy to clipboard"
             ></button>
           </div>
           <textarea
@@ -226,7 +258,9 @@
           ></textarea>
 
           <p>Download file</p>
-          <button class="icons download" id="exportListMenu__DownloadButton">Download file</button>
+          <button class="icons download" id="exportListMenu__DownloadButton" title="Download file">
+            Download file
+          </button>
         </div>
 
         <div class="screen__div__actions">
@@ -234,12 +268,18 @@
             <button
               class="screen__div__actions__close screen__div__actions__close__button onlyoone"
               id="exportListMenu__GoBackButton"
+              title="Go back to configuring current list"
             >
               Go Back
             </button>
           </div>
           <div class="screen__div__actions__right">
-            <button class="screen__div__actions__close onlyoone">Ok</button>
+            <button
+              class="screen__div__actions__close onlyoone"
+              title="Accept, and Close this menu"
+            >
+              Ok
+            </button>
           </div>
         </div>
       </div>
@@ -264,6 +304,7 @@
             class="buttons icons upload"
             id="importListMenu__ImportFileLabel"
             for="importListMenu__ImportFileButton"
+            title="Import a file"
             >Import file</label
           >
           <p id="importListMenu__ImportFileName">nameoffile.txt</p>
@@ -287,12 +328,17 @@
             <button
               class="screen__div__actions__close screen__div__actions__close__button onlyoone"
               id="importListMenu__GoBackButton"
+              title="Go back to configuring current list"
             >
               Go Back
             </button>
           </div>
           <div class="screen__div__actions__right">
-            <button class="screen__div__actions__close onlyoone" id="importListMenu__ImportButton">
+            <button
+              class="screen__div__actions__close onlyoone"
+              id="importListMenu__ImportButton"
+              title="Import and close"
+            >
               Import
             </button>
           </div>
@@ -304,7 +350,11 @@
       <div id="configureListMenuDiv" class="screen__div screehastabs">
         <div id="screentabsbuttons">
           <button class="buttons icons pencil screentabbuttons selectedtab">Edit List</button>
-          <button class="buttons icons gear screentabbuttons" data-tabid="globalConfigurationsMenu">
+          <button
+            class="buttons icons gear screentabbuttons"
+            data-tabid="globalConfigurationsMenu"
+            title="Open global configurations"
+          >
             Configurations
           </button>
         </div>
@@ -344,10 +394,18 @@
 
           <div class="screen__div__actions">
             <div class="screen__div__actions__left">
-              <button class="screen__div__actions__close" id="configureListMenuDiv__ImportButton">
+              <button
+                class="screen__div__actions__close"
+                id="configureListMenuDiv__ImportButton"
+                title="Import a list"
+              >
                 Import
               </button>
-              <button class="screen__div__actions__close" id="configureListMenuDiv__ExportButton">
+              <button
+                class="screen__div__actions__close"
+                id="configureListMenuDiv__ExportButton"
+                title="Export this list"
+              >
                 Export
               </button>
             </div>
@@ -355,10 +413,13 @@
               <button
                 class="screen__div__actions__close screen__div__actions__close__button"
                 id="configureListMenuDiv__CloseButton"
+                title="Cancel"
               >
                 Cancel
               </button>
-              <button id="configureListMenuDiv__SaveButton">Save</button>
+              <button id="configureListMenuDiv__SaveButton" title="Save changes and close">
+                Save
+              </button>
             </div>
           </div>
         </div>
@@ -368,7 +429,9 @@
     <div id="globalConfigurationsMenu" class="screen">
       <div id="globalConfigurationsMenuDiv" class="screen__div screehastabs">
         <div id="screentabsbuttons">
-          <button class="buttons icons pencil screentabbuttons" data-tabid="TAB 1">TAB 1</button>
+          <button class="buttons icons pencil screentabbuttons" data-tabid="TAB 1" title="TAB 1">
+            TAB 1
+          </button>
           <button class="buttons icons gear screentabbuttons selectedtab">Configurations</button>
         </div>
         <div class="screentab">
@@ -389,12 +452,19 @@
             <div class="screen__div__actions__left flex">
               <button
                 class="screen__div__actions__close screen__div__actions__close__button onlyoone"
+                title="Cancel"
               >
                 Cancel
               </button>
             </div>
             <div class="screen__div__actions__right flex">
-              <button class="onlyoone" id="globalConfigurationsMenuDiv__SaveButton">Save</button>
+              <button
+                class="onlyoone"
+                id="globalConfigurationsMenuDiv__SaveButton"
+                title="Save changes and close"
+              >
+                Save
+              </button>
             </div>
           </div>
         </div>
