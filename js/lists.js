@@ -86,6 +86,13 @@ let sideBarPosX = 0;
 let sideBarIsOpen = false;
 let timeouttosave = "";
 let lockedsidebar = false;
+let draggableSidebarPos = 32;
+
+if (window.innerWidth < 900) {
+  draggableSidebarPos = 32;
+} else {
+  draggableSidebarPos = 64;
+}
 
 if (isMobile) {
   window.addEventListener("touchstart", (e) => {
@@ -151,7 +158,7 @@ function StartTouching(x, target, e = null) {
   startSideBarPosX = x;
   sideBarPosX = x;
 
-  if (!isMobile && x > 32 && !sideBarIsOpen) {
+  if (!isMobile && x > draggableSidebarPos && !sideBarIsOpen) {
     startSideBarPosX = 0;
     sideBarPosX = 0;
     return;
@@ -213,7 +220,6 @@ function EndTouching(x, target) {
   lists__sidebar.style.transform = `TranslateX(${calc}%)`;
   lists__sidebar__dark.style.opacity = calc / 100 + 1;
 
-  console.log(lockedsidebar);
   if (target == "openSideBar" || lockedsidebar) {
     calc = 0;
     sideBarIsOpen = true;
@@ -223,9 +229,6 @@ function EndTouching(x, target) {
     sideBarIsOpen = false;
     disable = true;
   }
-
-  console.log("sideBarIsOpen", sideBarIsOpen);
-  console.log("disable", disable);
 
   setTimeout(() => {
     lists__sidebar.style.transform = `TranslateX(${calc}%)`;

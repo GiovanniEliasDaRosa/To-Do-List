@@ -1,7 +1,3 @@
-// Screens Divs
-const configMenuLists__itemTemplate = document.querySelector("#configMenuLists__itemTemplate");
-const configMenuLists__item = document.querySelector("#configMenuLists__item");
-
 // Configure the menus
 Enable(menu);
 Disable(list);
@@ -12,11 +8,6 @@ Disable(lists__sidebar);
 Disable(lists__sidebar__dark);
 // Disable(exportListMenu);
 // Disable(importListMenu);
-
-const screen = document.querySelectorAll(".screen");
-screen.forEach((currentScreen) => {
-  Disable(currentScreen);
-});
 
 const allbuttons = [...document.querySelectorAll("button, .buttons")];
 let untitlebuttons = 0;
@@ -36,7 +27,3 @@ if (untitlebuttons != 0) {
 
   console.log(untitlebuttonselements);
 }
-
-// setTimeout(() => {
-//   openConfigCurrentList.click();
-// }, 200);

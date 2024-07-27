@@ -27,6 +27,7 @@
     <script src="js/menu.js" defer></script>
     <script src="js/lists.js" defer></script>
     <script src="js/eventmanager.js" defer></script>
+    <script src="js/screens.js" defer></script>
     <script src="js/routes.js" defer></script>
   </head>
   <body>
@@ -51,7 +52,11 @@
     </div>
 
     <div id="list">
-      <button class="icons nomargin square bars" id="openSideBar" title="Open sidebar"></button>
+      <button
+        class="buttons square__big icons nomargin square bars"
+        id="openSideBar"
+        title="Open sidebar"
+      ></button>
 
       <div id="lists__sidebar">
         <button
@@ -299,7 +304,6 @@
           ></textarea>
 
           <p>Import file</p>
-          <!-- <button class="icons download" id="importListMenu__ImportFileButton">Import file</button> -->
           <label
             class="buttons icons upload"
             id="importListMenu__ImportFileLabel"
@@ -309,18 +313,6 @@
           >
           <p id="importListMenu__ImportFileName">nameoffile.txt</p>
           <input type="file" id="importListMenu__ImportFileButton" style="display: none" />
-
-          <!-- <div id="ExportAndInportData">
-            <div id="OutputGroup" style="height: 0px; opacity: 0; width: 200px">
-              <p id="Output">Imported Hello.txt</p>
-              <p id="CloseButton" onclick="CloseOutPut()">×</p>
-            </div>
-            <label class="ExpAndInpDataButton" for="file-selector">
-              Import Data
-              <input type="file" id="file-selector" /><br />
-            </label>
-            <p class="ExpAndInpDataButton" onclick="DownloadData()">Export Data</p>
-          </div> -->
         </div>
 
         <div class="screen__div__actions">
