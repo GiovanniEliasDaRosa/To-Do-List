@@ -1,6 +1,6 @@
 @font-face {
   font-family: "Montserrat";
-  src: url(font/montserrat-variable.ttf);
+  src: url("../fonts/montserrat-variable.ttf");
 }
 
 :root {
