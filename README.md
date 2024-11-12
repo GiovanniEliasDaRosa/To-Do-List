@@ -7,14 +7,13 @@ Welcome to the To-Do List app! This simple yet powerful tool helps you organize 
 1. **Create Lists**: Organize your tasks into separate lists. Each list can have a title, description, and last edit timestamp.
 2. **Add Items**: Within each list, you can add individual items. These items can represent tasks, reminders, or anything else you need to remember.
 3. **Edit Check Items**: Mark items as completed or update their status. Keep track of your progress!
-4.
 
 ## Getting Started
 
-1. Clone this repository to your local machine.
-2. Install any necessary dependencies.
-3. Run the app locally clicking the index.html file.
-4. If using online and now want to use offline you can export your data and import on local.
+There is 2 ways to use this:
+
+1. Use online access [To-Do-List on github.io](https://giovannieliasdarosa.github.io/To-Do-List)
+2. Use offline go to the end of the file
 
 ## Usage
 
@@ -30,9 +29,9 @@ Contributions are welcome! If you find any issues or have suggestions for improv
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
-# Serach Tags
+## Installation to run offline
 
-**Search Tags**: If you're experimenting with the app on your local machine, use the following tags for troubleshooting:
-
-- **route**: Logs related to routing (useful for debugging navigation).
-- **itemdrag**: Logs related to dragging an item (helpful for handling user interactions).
+1. **Download the ZIP File**: Go to the GitHub repository and download the ZIP file.
+2. **Unzip the File**: Extract the contents of the ZIP file to a folder on your computer.
+3. **Open the Game**: Locate and open the `index.html` file in your web browser.
+4. **Use the app**: Enjoy organizing your like!
