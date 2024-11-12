@@ -48,6 +48,9 @@
 }
 
 /* drag button */
+/* .item__dragabblebutton {
+} */
+
 .item__dragabblebutton {
   width: 1.25em;
   height: 100%;
@@ -57,6 +60,10 @@
   cursor: grab;
   padding: 0.5em 0.5em;
   border: solid 0.1em hsla(0, 0%, 100%, 0.02);
+}
+
+.item__dragabblebutton.dragging__button {
+  opacity: 0;
 }
 
 .item__input {

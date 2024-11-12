@@ -23,12 +23,12 @@
     <link rel="stylesheet" href="css/configlists.css" />
     <link rel="stylesheet" href="css/configcurrentlist.css" />
 
-    <script src="js/functions.js" defer></script>
-    <script src="js/menu.js" defer></script>
-    <script src="js/lists.js" defer></script>
-    <script src="js/eventmanager.js" defer></script>
-    <script src="js/screens.js" defer></script>
-    <script src="js/routes.js" defer></script>
+    <script src="js/functions.js" defer="true"></script>
+    <script src="js/menu.js" defer="true"></script>
+    <script src="js/lists.js" defer="true"></script>
+    <script src="js/eventmanager.js" defer="true"></script>
+    <script src="js/screens.js" defer="true"></script>
+    <script src="js/routes.js" defer="true"></script>
   </head>
   <body>
     <div id="menu">
@@ -125,11 +125,13 @@
     </template>
 
     <template id="itemTemplate">
-      <div class="item" data-id="0" draggable="true">
-        <button
-          class="item__dragabblebutton icons nomargin grip"
+      <div class="item" data-id="0">
+        <div
+          class="item__dragabblebutton buttons icons nomargin grip"
+          draggable="true"
           title="Click for options"
-        ></button>
+          tabindex="0"
+        ></div>
         <input class="item__checkbox" type="checkbox" name="undefined" id="undefined" />
         <input class="item__input" type="text" name="iteminput" />
       </div>

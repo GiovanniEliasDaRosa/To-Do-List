@@ -87,6 +87,8 @@ let sideBarIsOpen = false;
 let timeouttosave = "";
 let lockedsidebar = false;
 let draggableSidebarPos = 32;
+let lastMouseY = 0;
+let waitSwapDrag = "";
 
 if (window.innerWidth < 900) {
   draggableSidebarPos = 32;
@@ -104,6 +106,16 @@ if (isMobile) {
     ) {
       HideItemActions();
     }
+  });
+
+  window.addEventListener("touchcancel", (e) => {
+    if (document.querySelector(".item.dragging") != null) {
+      // we were just dragging an item just now
+      BodyTouchend(e);
+      return;
+    }
+
+    EndTouching(e.changedTouches[0].clientX, e.changedTouches[0].target.id);
   });
 
   window.addEventListener("touchend", (e) => {
@@ -397,6 +409,7 @@ function CreateNewItem(content, checked, pos) {
   item__input.value = content;
 
   item__dragabblebutton.addEventListener("click", (e) => {
+    console.warn("click");
     let isTrusted = e.isTrusted;
     Enable(item__actions);
     item__actions.setAttribute("data-id", item.dataset.id);
@@ -437,7 +450,7 @@ function CreateNewItem(content, checked, pos) {
       StartDragging(item, e, e.clientX, e.clientY);
     });
 
-    item.addEventListener("drag", (e) => {
+    item.addEventListener("dragover", (e) => {
       Dragging(item, e.clientY, pos);
     });
 
@@ -639,6 +652,7 @@ function StartDragging(item, e, clientX, clientY) {
   // console.log("StartDragging"); // [tag:itemdrag]
   let x = clientX;
   let y = clientY;
+  lastMouseY = 0;
   const frompoint = document.elementFromPoint(x, clientY);
 
   if (frompoint.classList[0] != "item__dragabblebutton") {
@@ -663,6 +677,8 @@ function StartDragging(item, e, clientX, clientY) {
   document.body.appendChild(currentPreviewItem);
 
   item.classList.add("dragging");
+
+  item.querySelector(".item__dragabblebutton").classList.add("dragging__button");
 }
 
 function Dragging(item, clientY, pos) {
@@ -671,6 +687,14 @@ function Dragging(item, clientY, pos) {
   // console.log(`Dragging(item, ${clientY}, ${pos})`);
   let x = bound.x;
   let y = clientY + window.scrollY - diff.y;
+
+  if (lastMouseY == clientY) {
+    console.log("%cSAME MOUSE POS", "padding: 0.5em; background: hsla(0, 100%, 50%, 0.2)");
+    return;
+  }
+
+  clearTimeout(waitSwapDrag);
+  lastMouseY = clientY;
 
   if (clientY == 0) {
     y = -128;
@@ -693,13 +717,14 @@ function Dragging(item, clientY, pos) {
   let positem = Number(list__items.children[pos].dataset.id);
   let wantedpositem = Number(list__items.children[wantedpos].dataset.id);
 
-  // console.log(pos, wantedpos);
-  // console.log(positem, wantedpositem);
-
   if (positem > wantedpositem) {
-    list__items.insertBefore(item, frompoint);
+    waitSwapDrag = setTimeout(() => {
+      list__items.insertBefore(item, frompoint);
+    }, 10);
   } else if (positem < wantedpositem) {
-    list__items.insertBefore(frompoint, item);
+    waitSwapDrag = setTimeout(() => {
+      list__items.insertBefore(frompoint, item);
+    }, 10);
   }
 }
 
@@ -707,9 +732,11 @@ function EndDragging(item, clientY, pos, animate = true) {
   // console.log("EndDragging"); // [tag:itemdrag]
   let save = true;
   item.classList.remove("dragging");
+  lastMouseY = 0;
 
   let x = bound.x;
   let y = clientY + window.scrollY - diff.y;
+  item.querySelector(".item__dragabblebutton").classList.remove("dragging__button");
 
   const frompoint = document.elementFromPoint(x, clientY);
 
@@ -721,6 +748,7 @@ function EndDragging(item, clientY, pos, animate = true) {
   let dragabblebuttons = [...list__items.querySelectorAll(".item__dragabblebutton")];
 
   if (!isMobileDragging) {
+    alert("aisMobileDragging");
     if (currentPreviewItem != null) {
       currentPreviewItem.remove();
       currentPreviewItem = null;
@@ -794,21 +822,24 @@ function EndDragging(item, clientY, pos, animate = true) {
 /* Dragging item Mobile */
 function BodyTouchmove(e) {
   // console.log("BodyTouchmove", e);
-  const item = e.touches[0].target.parentElement;
+  let touches = e.touches[0] || e.changedTouches[0];
+
+  const item = touches.target.parentElement;
   const pos = Number(item.dataset.id);
 
-  Dragging(item, e.touches[0].clientY, pos);
+  Dragging(item, touches.clientY, pos);
 }
 
 function BodyTouchend(e) {
   // console.log("BodyTouchend", e);
-  let hangedTouches = e.changedTouches[0];
-  const item = hangedTouches.target.parentElement;
+  let touches = e.touches[0] || e.changedTouches[0];
+  const item = touches.target.parentElement;
   const pos = Number(item.dataset.id);
-  isMobileDragging = false;
 
-  EndDragging(item, hangedTouches.clientY, pos);
+  EndDragging(item, touches.clientY, pos);
   document.body.style.overflow = "";
+
+  isMobileDragging = false;
 
   window.removeEventListener("touchmove", BodyTouchmove);
 }
