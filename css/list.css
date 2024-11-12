@@ -58,15 +58,15 @@
   display: flex;
   justify-content: center;
   align-items: flex-end;
-  background: linear-gradient(0deg, hsl(0, 2%, 6%), hsla(0, 2%, 6%, 0));
+  background: var(--progressbar-div-bg-gradient);
   pointer-events: none;
 }
 
 #progressbar {
   height: 1.5em;
   width: min(30em, calc(100vw - 3rem));
-  background-color: hsla(0, 0%, 0%, 0.4);
-  border: 0.1em solid hsla(0, 0%, 100%, 0.5);
+  background-color: var(--progressbar-bg-color);
+  border: 0.1em solid var(--border-color-500);
   overflow: hidden;
   border-radius: 0.5em;
 
@@ -81,8 +81,8 @@
 #progressbar__fill {
   width: 0%;
   height: 100%;
-  background-color: hsl(110, 46%, 42%);
-  border: 0.1em solid hsla(0, 0%, 100%, 0.5);
+  background-color: var(--primary-color-1000);
+  border: 0.1em solid var(--border-color-500);
   border-radius: 0.42em;
   position: relative;
   overflow: hidden;
@@ -94,15 +94,13 @@
   position: absolute;
   inset: 0;
   z-index: 1;
-  --color: hsla(0, 0%, 100%, 0.4);
-  --color2: hsla(0, 0%, 100%, 0.3);
   background: linear-gradient(
       -45deg,
-      var(--color2) 0%,
+      var(--progressbar-fill-color-2) 0%,
       transparent 20%,
-      var(--color) 50%,
+      var(--progressbar-fill-color-1) 50%,
       transparent 80%,
-      var(--color2) 100%
+      var(--progressbar-fill-color-2) 100%
     )
     repeat;
   background-size: 2em 100%;
@@ -145,11 +143,14 @@
   align-items: center;
   text-align: right;
   font-weight: 700;
-  color: hsla(0, 0%, 100%);
+  color: var(--progressbar-text-color);
   z-index: 1;
 
-  /* text-shadow: 0.1em 0.1em 0 hsl(0, 0%, 100%), 0.25em 0.125em 0 hsla(0, 0%, 20%, 0.15); */
-  text-shadow: -0.1em -0.1em 0 hsla(0, 0%, 20%), 0 -0.1em 0 hsla(0, 0%, 20%),
-    0.1em -0.1em 0 hsla(0, 0%, 20%), -0.1em 0 0 hsla(0, 0%, 20%), 0.1em 0 0 hsla(0, 0%, 20%),
-    -0.1em 0.1em 0 hsla(0, 0%, 20%), 0 0.1em 0 hsla(0, 0%, 20%), 0.1em 0.1em 0 hsla(0, 0%, 20%);
+  text-shadow: -0.1em -0.1em 0 var(--progressbar-text-shadow-color),
+    0 -0.1em 0 var(--progressbar-text-shadow-color),
+    0.1em -0.1em 0 var(--progressbar-text-shadow-color),
+    -0.1em 0 0 var(--progressbar-text-shadow-color), 0.1em 0 0 var(--progressbar-text-shadow-color),
+    -0.1em 0.1em 0 var(--progressbar-text-shadow-color),
+    0 0.1em 0 var(--progressbar-text-shadow-color),
+    0.1em 0.1em 0 var(--progressbar-text-shadow-color);
 }

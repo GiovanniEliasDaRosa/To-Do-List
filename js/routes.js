@@ -1,3 +1,5 @@
+const root = document.querySelector(":root");
+
 var hash = "";
 var listId = null;
 let menuInterval = "";

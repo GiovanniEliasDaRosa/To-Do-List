@@ -5,26 +5,247 @@
 
 :root {
   color-scheme: dark;
-  background-color: hsl(0, 2%, 6%);
+  --background-color: hsl(0, 2%, 6%);
+  --text-color: hsl(0, 0%, 95%);
+
+  /* Accessibility */
+  --accessibility-outline: hsl(0, 0%, 100%);
+  --accessibility-boxshadow: hsl(0, 0%, 0%);
+
+  /* Checkbox */
+  --input-checkbox-bg-color: hsl(180, 10%, 15%);
+  --input-checkbox-bg-color-hover: hsl(180, 5%, 25%);
+  --input-checkbox-bg-color-focus-visible: hsl(180, 5%, 35%);
+
+  /* Input */
+  --input-text-bg-color: hsla(0, 0%, 0%, 0.2);
+  --input-text-bg-color-focus: hsla(0, 0%, 0%, 0.4);
+  --input-text-color: hsl(0, 0%, 80%);
+  --input-text-color-focus: hsl(0, 0%, 100%);
+  --input-text-color-placeholder: hsl(0, 0%, 80%);
+
+  /* Border */
+  --border-color-1000: hsl(0, 0%, 100%);
+  --border-color-900: hsla(0, 0%, 100%, 0.9);
+  --border-color-800: hsla(0, 0%, 100%, 0.8);
+  --border-color-700: hsla(0, 0%, 100%, 0.7);
+  --border-color-600: hsla(0, 0%, 100%, 0.6);
+  --border-color-500: hsla(0, 0%, 100%, 0.5);
+  --border-color-400: hsla(0, 0%, 100%, 0.4);
+  --border-color-300: hsla(0, 0%, 100%, 0.3);
+  --border-color-200: hsla(0, 0%, 100%, 0.2);
+  --border-color-100: hsla(0, 0%, 100%, 0.1);
+
+  /* Error */
+  --error-color-1000: hsl(0, 100%, 50%);
+  --error-color-900: hsla(0, 100%, 50%, 0.9);
+  --error-color-800: hsla(0, 100%, 50%, 0.8);
+  --error-color-700: hsla(0, 100%, 50%, 0.7);
+  --error-color-600: hsla(0, 100%, 50%, 0.6);
+  --error-color-500: hsla(0, 100%, 50%, 0.5);
+  --error-color-400: hsla(0, 100%, 50%, 0.4);
+  --error-color-300: hsla(0, 100%, 50%, 0.3);
+  --error-color-200: hsla(0, 100%, 50%, 0.2);
+  --error-color-100: hsla(0, 100%, 50%, 0.1);
+
+  /* Error */
+  --primary-color-1000: hsl(110, 46%, 42%);
+  --primary-color-900: hsla(110, 46%, 42%, 0.9);
+  --primary-color-800: hsla(110, 46%, 42%, 0.8);
+  --primary-color-700: hsla(110, 46%, 42%, 0.7);
+  --primary-color-600: hsla(110, 46%, 42%, 0.6);
+  --primary-color-500: hsla(110, 46%, 42%, 0.5);
+  --primary-color-400: hsla(110, 46%, 42%, 0.4);
+  --primary-color-300: hsla(110, 46%, 42%, 0.3);
+  --primary-color-200: hsla(110, 46%, 42%, 0.2);
+  --primary-color-100: hsla(110, 46%, 42%, 0.1);
+
+  /* Menu */
+  --menu-bg-gradient: linear-gradient(0deg, #080a0f, #181d2e);
+
+  /* List */
+  --progressbar-div-bg-gradient: linear-gradient(0deg, hsl(0, 2%, 6%), hsla(0, 2%, 6%, 0));
+  --progressbar-bg-color: hsla(0, 0%, 0%, 0.4);
+  --progressbar-fill-color-1: hsla(0, 0%, 100%, 0.4);
+  --progressbar-fill-color-2: hsla(0, 0%, 100%, 0.3);
+  --progressbar-text-color: hsla(0, 0%, 100%);
+  --progressbar-text-shadow-color: hsla(0, 0%, 20%);
+
+  /* Config Current List */
+  --lists-sidebar-bg-gradient: linear-gradient(0deg, #232c48, #4b5883);
+  --lists-sidebar-dark: rgba(0, 0, 0, 0.5);
+
+  /* Screens */
+  --screens-bg-color-dark: hsla(0, 0%, 0%, 0.4);
+  --screens-bg-color: hsl(228, 17%, 6%);
+
+  --screen-tab-buttons: hsl(228, 17%, 6%);
+  --screen-tab-buttons-hover: hsl(233, 15%, 11%);
+  --screen-tab-buttons-focus: hsl(227, 20%, 18%);
+
+  --screen-tab-selectedtab: hsl(227, 27%, 36%);
+  --screen-tab-selectedtab-hover: hsl(227, 26%, 42%);
+  --screen-tab-selectedtab-focus: hsl(227, 45%, 44%);
+
+  /* Items */
+  --animatedrop-30: hsla(0, 0%, 100%, 0.1);
+  --animatedrop-50: hsla(0, 0%, 100%, 0.4);
+  --animatedrop-100: hsla(0, 0%, 100%, 0);
+  --item-input-bg-color: hsla(0, 0%, 0%, 0);
+  --item-input-text-color: hsl(0, 0%, 80%);
+  --item-input-text-color-checked: hsla(0, 0%, 100%, 0.6);
+  --item-input-text-color-focus: hsl(0, 0%, 100%);
+  --item-dragging-shadow-color: white;
+  --item-preview-bg-color: hsla(0, 0%, 100%, 0.1);
+  --item-preview-shadow-color: hsla(0, 0%, 0%, 0.2);
+  --item-actions-bg-color: hsl(0, 2%, 6%);
+  --item-actions-text-color: white;
+
+  /* Buttons */
+  --button-bg-color: hsla(0, 0%, 100%, 0);
+  --button-text-color: white;
+  --button-bg-color-hover-focus: hsla(0, 0%, 100%, 0.1);
+
+  --button-warn-bg-color: hsla(0, 100%, 50%, 0.2);
+  --button-warn-border-color: hsla(0, 100%, 50%, 0.6);
+
+  --button-warn-bg-color-hover-focus: hsla(0, 100%, 50%, 0.5);
+  --button-warn-border-color-hover-focus: hsla(0, 100%, 50%, 0.7);
+
+  background-color: var(--background-color);
 }
 
-body {
-  min-height: 100vh;
+:root[data-theme="light"] {
+  color-scheme: light;
+  --background-color: hsl(225, 48%, 92%);
+  --text-color: hsl(0, 0%, 5%);
+
+  /* Accessibility */
+  --accessibility-outline: hsl(0, 0%, 0%);
+  --accessibility-boxshadow: hsl(0, 0%, 100%);
+
+  /* Checkbox */
+  --input-checkbox-bg-color: hsl(180, 18%, 90%);
+  --input-checkbox-bg-color-hover: hsl(180, 17%, 80%);
+  --input-checkbox-bg-color-focus-visible: hsl(180, 6%, 59%);
+
+  /* Input */
+  --input-text-bg-color: hsla(0, 0%, 0%, 0.05);
+  --input-text-bg-color-focus: hsla(0, 0%, 0%, 0.1);
+  --input-text-color: hsl(0, 0%, 0%);
+  --input-text-color-focus: hsl(0, 0%, 0%);
+  --input-text-color-placeholder: hsl(0, 0%, 20%);
+
+  /* Border */
+  --border-color-1000: hsl(0, 0%, 0%);
+  --border-color-900: hsla(0, 0%, 0%, 0.9);
+  --border-color-800: hsla(0, 0%, 0%, 0.8);
+  --border-color-700: hsla(0, 0%, 0%, 0.7);
+  --border-color-600: hsla(0, 0%, 0%, 0.6);
+  --border-color-500: hsla(0, 0%, 0%, 0.5);
+  --border-color-400: hsla(0, 0%, 0%, 0.4);
+  --border-color-300: hsla(0, 0%, 0%, 0.3);
+  --border-color-200: hsla(0, 0%, 0%, 0.2);
+  --border-color-100: hsla(0, 0%, 0%, 0.1);
+
+  /* Error */
+  --error-color-1000: hsl(0, 100%, 80%);
+  --error-color-900: hsla(0, 100%, 80%, 0.9);
+  --error-color-800: hsla(0, 100%, 80%, 0.8);
+  --error-color-700: hsla(0, 100%, 80%, 0.7);
+  --error-color-600: hsla(0, 100%, 80%, 0.6);
+  --error-color-500: hsla(0, 100%, 80%, 0.5);
+  --error-color-400: hsla(0, 100%, 80%, 0.4);
+  --error-color-300: hsla(0, 100%, 80%, 0.3);
+  --error-color-200: hsla(0, 100%, 80%, 0.2);
+  --error-color-100: hsla(0, 100%, 80%, 0.1);
+
+  /* Error */
+  --primary-color-1000: hsl(110, 40%, 40%);
+  --primary-color-900: hsla(110, 40%, 40%, 0.9);
+  --primary-color-800: hsla(110, 40%, 40%, 0.8);
+  --primary-color-700: hsla(110, 40%, 40%, 0.7);
+  --primary-color-600: hsla(110, 40%, 40%, 0.6);
+  --primary-color-500: hsla(110, 40%, 40%, 0.5);
+  --primary-color-400: hsla(110, 40%, 40%, 0.4);
+  --primary-color-300: hsla(110, 40%, 40%, 0.3);
+  --primary-color-200: hsla(110, 40%, 40%, 0.2);
+  --primary-color-100: hsla(110, 40%, 40%, 0.1);
+
+  /* Menu */
+  --menu-bg-gradient: linear-gradient(0deg, #a7bbee, #e0e5f4);
+
+  /* List */
+  --progressbar-div-bg-gradient: linear-gradient(0deg, hsl(0, 98%, 98%), hsla(0, 98%, 98%, 0));
+  --progressbar-bg-color: hsla(0, 0%, 0%, 0.4);
+  --progressbar-fill-color-1: hsla(0, 0%, 100%, 0.4);
+  --progressbar-fill-color-2: hsla(0, 0%, 100%, 0.3);
+  --progressbar-text-color: hsl(0, 0%, 0%);
+  --progressbar-text-shadow-color: hsla(0, 0%, 95%);
+
+  /* Config Current List */
+  --lists-sidebar-bg-gradient: linear-gradient(0deg, #232c48, #4b5883);
+  --lists-sidebar-dark: rgba(0, 0, 0, 0.5);
+
+  /* Screens */
+  --screens-bg-color-dark: hsla(0, 0%, 0%, 0.4);
+  --screens-bg-color: hsl(227, 22%, 92%);
+
+  --screen-tab-buttons: hsl(228, 34%, 85%);
+  --screen-tab-buttons-hover: hsl(233, 57%, 85%);
+  --screen-tab-buttons-focus: hsl(227, 100%, 96%);
+
+  --screen-tab-selectedtab: hsl(227, 95%, 78%);
+  --screen-tab-selectedtab-hover: hsl(227, 100%, 82%);
+  --screen-tab-selectedtab-focus: hsl(227, 100%, 91%);
+
+  /* Items */
+  --animatedrop-30: hsla(0, 0%, 100%, 0.1);
+  --animatedrop-50: hsla(0, 0%, 100%, 0.4);
+  --animatedrop-100: hsla(0, 0%, 100%, 0);
+  --item-input-bg-color: hsla(0, 0%, 0%, 0);
+  --item-input-text-color: hsl(0, 0%, 20%);
+  --item-input-text-color-checked: hsla(0, 0%, 0%, 0.6);
+
+  --item-input-text-color-focus: hsl(0, 0%, 0%);
+  --item-dragging-shadow-color: hsl(0, 0%, 0%);
+
+  --item-preview-bg-color: hsla(0, 0%, 0%, 0.1);
+  --item-preview-shadow-color: hsla(0, 0%, 100%, 0.2);
+
+  --item-actions-bg-color: hsl(0, 23%, 92%);
+  --item-actions-text-color: hsl(0, 0%, 0%);
+
+  /* Buttons */
+  --button-bg-color: hsla(0, 0%, 0%, 0);
+  --button-text-color: hsl(0, 0%, 0%);
+  --button-bg-color-hover-focus: hsla(0, 0%, 0%, 0.1);
+
+  --button-warn-bg-color: hsla(0, 100%, 50%, 0.2);
+  --button-warn-border-color: hsla(0, 100%, 50%, 0.6);
+
+  --button-warn-bg-color-hover-focus: hsla(0, 100%, 50%, 0.5);
+  --button-warn-border-color-hover-focus: hsla(0, 100%, 50%, 0.7);
+}
+
+.animateTransition,
+.animateTransition * {
+  transition: 1.5s cubic-bezier(0.25, 1, 0.5, 1) !important;
 }
 
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  color: hsl(0, 0%, 95%);
+  color: var(--text-color);
   font-family: "Montserrat", sans-serif;
   font-optical-sizing: auto;
   font-style: normal;
 }
 
 :focus-visible {
-  outline: solid 0.2em white;
-  box-shadow: 0 0 0 0.4em black;
+  outline: solid 0.2em var(--accessibility-outline);
+  box-shadow: 0 0 0 0.4em var(--accessibility-boxshadow);
 }
 
 *:is(:disabled, [disabled="true"]) {
@@ -32,19 +253,21 @@ body {
   pointer-events: none;
 }
 
-/* input checkbox */
+body {
+  min-height: 100vh;
+}
 
+/* MARK: Input checkbox
+*/
+/* #region */
 input[type="checkbox"] {
   position: relative;
   appearance: none;
   width: 2em;
   height: 2em;
   border-radius: 0.25em;
-  /* background: url("../img/unchecked.png") no-repeat; */
-  background-color: hsl(180, 10%, 15%);
-  /* background-color: hsl(180, 9%, 17%); */
-  /* border: solid 0.1em hsl(180, 2%, 58%); */
-  border: solid 0.1em hsla(0, 0%, 100%, 0.4);
+  background-color: var(--input-checkbox-bg-color);
+  border: solid 0.1em var(--border-color-400);
   overflow: hidden;
   cursor: pointer;
 }
@@ -69,28 +292,30 @@ input[type="checkbox"]:checked:before {
 input[type="checkbox"],
 input[type="checkbox"]:before {
   background-size: cover;
-  /* image-rendering: pixelated; */
 }
 
 input[type="checkbox"]:hover {
-  background-color: hsl(180, 5%, 25%);
-  border: solid 0.1em hsla(0, 0%, 100%, 0.5);
+  background-color: var(--input-checkbox-bg-color-hover);
+  border: solid 0.1em var(--border-color-500);
 }
 
 input[type="checkbox"]:focus-visible {
-  background-color: hsl(180, 5%, 35%);
-  border: solid 0.1em hsla(0, 0%, 100%, 0.6);
+  background-color: var(--input-checkbox-bg-color-focus-visible);
+  border: solid 0.1em var(--border-color-400);
 }
+/* #ednregion */
 
-/* input text */
+/* MARK: Input text
+*/
+/* #region */
 input[type="text"]:not(.item__input),
 textarea {
   border-radius: 0.5em;
   font-size: 1rem;
   padding: 0.2em 0.2em;
-  background-color: hsla(0, 0%, 0%, 0.2);
-  border: 0.1em solid hsla(0, 0%, 100%, 0.3);
-  color: hsl(0, 0%, 80%);
+  background-color: var(--input-text-bg-color);
+  border: 0.1em solid var(--border-color-300);
+  color: var(--input-text-color);
   width: 100%;
 }
 
@@ -99,27 +324,30 @@ textarea {
 }
 
 :is(input[type="text"]:not(.item__input), textarea):focus-visible {
-  background-color: hsla(0, 0%, 0%, 0.4);
-  border: 0.1em solid hsla(0, 0%, 100%, 0.5);
-  color: hsl(0, 0%, 100%);
+  background-color: var(--input-text-bg-color-focus);
+  border: 0.1em solid var(--border-color-500);
+  color: var(--input-text-color-focus);
 }
 
 :is(input[type="text"], textarea)::placeholder {
-  color: hsl(0, 0%, 80%);
+  color: var(--input-text-color-placeholder);
 }
 
 :is(input[type="text"], textarea)[data-error] {
-  border: 0.1em solid hsla(0, 100%, 50%, 0.5);
-  outline: solid 0.1em hsla(0, 100%, 50%, 0.5);
-  box-shadow: inset 0 0 0 0.2em hsla(0, 100%, 50%, 0.5);
+  border: 0.1em solid var(--error-500);
+  outline: solid 0.1em var(--error-500);
+  box-shadow: inset 0 0 0 0.2em var(--error-500);
 }
 
-[data-user-dont-select] {
+[data-user-dont-select="true"] {
   -webkit-user-select: none;
   user-select: none;
 }
+/* #ednregion */
 
-/* data-smallUI */
+/* MARK: [Config] Small UI
+*/
+/* #region */
 [data-smallUI] :is(button.square, .buttons.square, button.square__big, .buttons.square__big) {
   width: 2em !important;
   height: 2em !important;
@@ -129,3 +357,4 @@ textarea {
   width: 2rem !important;
   height: 2rem !important;
 }
+/* #ednregion */

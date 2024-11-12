@@ -176,7 +176,7 @@ function StartTouching(x, target, e = null) {
     return;
   }
 
-  document.body.setAttribute("data-user-dont-select", "");
+  document.body.setAttribute("data-user-dont-select", "true");
 
   if (isMobile) {
     window.removeEventListener("touchmove", TouchMoved);

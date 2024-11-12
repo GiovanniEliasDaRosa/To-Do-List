@@ -48,6 +48,19 @@ function LoadData() {
     }
   }
 
+  if (localStorage.getItem("theme") != null) {
+    darkTheme = localStorage.getItem("theme") == "light" ? false : true;
+
+    if (darkTheme) {
+      root.setAttribute("data-theme", "dark");
+    } else {
+      root.setAttribute("data-theme", "light");
+    }
+  } else if (window.matchMedia("(prefers-color-scheme: light)").matches) {
+    darkTheme = false;
+    root.setAttribute("data-theme", "light");
+  }
+
   let listgot = localStorage.getItem("lists");
 
   if (listgot == null) return;

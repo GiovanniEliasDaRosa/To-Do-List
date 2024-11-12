@@ -15,7 +15,7 @@
   align-items: center;
   padding: 0.5em;
   border-radius: 0.5em;
-  border: solid 0.1em hsla(0, 0%, 100%, 0.6);
+  border: solid 0.1em var(--border-color-600);
 }
 
 .cards__config__deleteButton {
