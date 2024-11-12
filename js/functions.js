@@ -12,7 +12,7 @@ function Enable(element) {
 
 function Disable(element, hide = true) {
   element.setAttribute("aria-disabled", "true");
-  element.setAttribute("disabled", "");
+  element.setAttribute("disabled", "true");
   if (hide) {
     element.style.display = "none";
   }

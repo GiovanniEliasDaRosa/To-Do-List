@@ -1,14 +1,3 @@
-// Configure the menus
-Enable(menu);
-Disable(list);
-// Disable(addNewListMenu);
-// Disable(configListsMenu);
-// Disable(configCurrentListMenu);
-Disable(lists__sidebar);
-Disable(lists__sidebar__dark);
-// Disable(exportListMenu);
-// Disable(importListMenu);
-
 const allbuttons = [...document.querySelectorAll("button, .buttons")];
 let untitlebuttons = 0;
 let untitlebuttonselements = [];

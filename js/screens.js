@@ -2,11 +2,6 @@
 const configMenuLists__itemTemplate = document.querySelector("#configMenuLists__itemTemplate");
 const configMenuLists__item = document.querySelector("#configMenuLists__item");
 
-const screen = document.querySelectorAll(".screen");
-screen.forEach((currentScreen) => {
-  Disable(currentScreen);
-});
-
 // Screen
 const screens = [...document.querySelectorAll(".screen")];
 const screen__div__actions__close = [...document.querySelectorAll(".screen__div__actions__close")];

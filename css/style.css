@@ -27,7 +27,7 @@ body {
   box-shadow: 0 0 0 0.4em black;
 }
 
-*:is(:disabled, [disabled]) {
+*:is(:disabled, [disabled="true"]) {
   opacity: 0.5;
   pointer-events: none;
 }
