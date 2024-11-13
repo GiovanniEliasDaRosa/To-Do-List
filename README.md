@@ -1,5 +1,7 @@
 # To-Do List App
 
+[![Cover Image](https://raw.githubusercontent.com/GiovanniEliasDaRosa/To-Do-List/main/todolist-card.png)](https://giovannieliasdarosa.github.io/To-Do-List)
+
 Welcome to the To-Do List app! This simple yet powerful tool helps you organize your tasks, stay productive, and manage your time effectively. Whether you're a student, professional, or just someone who wants to keep track of their daily tasks, this app has got you covered.
 
 ## Features
