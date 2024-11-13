@@ -78,6 +78,10 @@
   width: min(30em, calc(100vw - 8rem));
 }
 
+[data-smallUI] #list:has(> #lists__sidebar[data-pinned]) #progressbar {
+  width: min(30em, calc(100vw - 6rem));
+}
+
 #progressbar__fill {
   width: 0%;
   height: 100%;
