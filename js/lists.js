@@ -703,11 +703,15 @@ function Dragging(item, clientY, pos) {
   currentPreviewItem.style.left = `${x}px`;
   currentPreviewItem.style.top = `${y}px`;
 
-  const frompoint = document.elementFromPoint(x, clientY - diff.y);
+  let frompoint = document.elementFromPoint(x + 8, clientY - diff.y);
 
   if (frompoint == null || frompoint.classList[0] != "item") {
-    console.log("%cNONE FOUND", "padding: 0.5em; background: hsla(0, 100%, 50%, 0.2)");
-    return;
+    if (frompoint.parentElement.classList[0] == "item") {
+      frompoint = frompoint.parentElement;
+    } else {
+      console.log("%cNONE FOUND", "padding: 0.5em; background: hsla(0, 100%, 50%, 0.2)");
+      return;
+    }
   }
 
   let wantedpos = Number(frompoint.dataset.id);
@@ -738,17 +742,20 @@ function EndDragging(item, clientY, pos, animate = true) {
   let y = clientY + window.scrollY - diff.y;
   item.querySelector(".item__dragabblebutton").classList.remove("dragging__button");
 
-  const frompoint = document.elementFromPoint(x, clientY);
+  let frompoint = document.elementFromPoint(x, clientY);
 
   if (frompoint == null || frompoint.classList[0] != "item") {
-    save = false;
-    console.log("%cNONE FOUND", "padding: 0.5em; background: hsla(0, 100%, 50%, 0.2)");
+    if (frompoint.parentElement.classList[0] == "item") {
+      frompoint = frompoint.parentElement;
+    } else {
+      save = false;
+      console.log("%cNONE FOUND", "padding: 0.5em; background: hsla(0, 100%, 50%, 0.2)");
+    }
   }
 
   let dragabblebuttons = [...list__items.querySelectorAll(".item__dragabblebutton")];
 
   if (!isMobileDragging) {
-    alert("aisMobileDragging");
     if (currentPreviewItem != null) {
       currentPreviewItem.remove();
       currentPreviewItem = null;
