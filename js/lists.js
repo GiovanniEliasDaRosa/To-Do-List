@@ -143,7 +143,6 @@ if (isMobile) {
 
 function StartTouching(x, target, e = null) {
   if (listId == null) return;
-  if (lockedsidebar) return;
 
   if (target != null) {
     if (target.classList[0] == "item__dragabblebutton") {
@@ -166,6 +165,7 @@ function StartTouching(x, target, e = null) {
       return;
     }
   }
+  if (lockedsidebar) return;
 
   startSideBarPosX = x;
   sideBarPosX = x;
@@ -687,6 +687,13 @@ function Dragging(item, clientY, pos) {
   // console.log(`Dragging(item, ${clientY}, ${pos})`);
   let x = bound.x;
   let y = clientY + window.scrollY - diff.y;
+  let windowYPos = clientY - diff.y;
+
+  if (windowYPos < window.innerHeight / 6) {
+    window.scrollTo(0, window.scrollY - 2);
+  } else if (windowYPos > (5 * window.innerHeight) / 6) {
+    window.scrollTo(0, window.scrollY + 2);
+  }
 
   if (lastMouseY == clientY) {
     console.log("%cSAME MOUSE POS", "padding: 0.5em; background: hsla(0, 100%, 50%, 0.2)");
@@ -703,7 +710,7 @@ function Dragging(item, clientY, pos) {
   currentPreviewItem.style.left = `${x}px`;
   currentPreviewItem.style.top = `${y}px`;
 
-  let frompoint = document.elementFromPoint(x + 8, clientY - diff.y);
+  let frompoint = document.elementFromPoint(x + 8, windowYPos);
 
   if (frompoint == null || frompoint.classList[0] != "item") {
     if (frompoint.parentElement.classList[0] == "item") {
