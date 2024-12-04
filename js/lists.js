@@ -450,10 +450,6 @@ function CreateNewItem(content, checked, pos) {
       StartDragging(item, e, e.clientX, e.clientY);
     });
 
-    item.addEventListener("dragover", (e) => {
-      Dragging(item, e.clientY, pos);
-    });
-
     item.addEventListener("dragend", (e) => {
       EndDragging(item, e.clientY, pos);
     });
@@ -535,8 +531,6 @@ function MoveItem(pos, direction) {
 }
 
 function SaveItem(item) {
-  console.log("save");
-
   const item__dragabblebutton = item.querySelector(".item__dragabblebutton");
   const item__input = item.querySelector(".item__input");
 
@@ -681,13 +675,14 @@ function StartDragging(item, e, clientX, clientY) {
   item.querySelector(".item__dragabblebutton").classList.add("dragging__button");
 }
 
-function Dragging(item, clientY, pos) {
+function Dragging(item, clientY, pos = null) {
+  pos = Number(item.dataset.id);
+  item = list__items.querySelector(`[data-id="${pos}"]`);
   isMobileDragging = true;
 
-  // console.log(`Dragging(item, ${clientY}, ${pos})`);
   let x = bound.x;
   let y = clientY + window.scrollY - diff.y;
-  let windowYPos = clientY - diff.y;
+  let windowYPos = clientY;
 
   if (windowYPos < window.innerHeight / 6) {
     window.scrollTo(0, window.scrollY - 2);
@@ -696,7 +691,7 @@ function Dragging(item, clientY, pos) {
   }
 
   if (lastMouseY == clientY) {
-    console.log("%cSAME MOUSE POS", "padding: 0.5em; background: hsla(0, 100%, 50%, 0.2)");
+    // console.log("%cSAME MOUSE POS", "padding: 0.5em; background: hsla(0, 100%, 50%, 0.2)");
     return;
   }
 
@@ -711,14 +706,22 @@ function Dragging(item, clientY, pos) {
   currentPreviewItem.style.top = `${y}px`;
 
   let frompoint = document.elementFromPoint(x + 8, windowYPos);
+  let isInvalid = false;
 
-  if (frompoint == null || frompoint.classList[0] != "item") {
-    if (frompoint.parentElement.classList[0] == "item") {
+  if (frompoint === null) {
+    isInvalid = true;
+  } else {
+    if (frompoint.classList.contains("item")) {
+    } else if (frompoint.parentElement && frompoint.parentElement.classList.contains("item")) {
       frompoint = frompoint.parentElement;
     } else {
-      console.log("%cNONE FOUND", "padding: 0.5em; background: hsla(0, 100%, 50%, 0.2)");
-      return;
+      isInvalid = true;
     }
+  }
+
+  if (isInvalid) {
+    console.log("%cNONE FOUND", "padding: 0.5em; background: hsla(0, 100%, 50%, 0.2)");
+    return;
   }
 
   let wantedpos = Number(frompoint.dataset.id);
@@ -749,15 +752,23 @@ function EndDragging(item, clientY, pos, animate = true) {
   let y = clientY + window.scrollY - diff.y;
   item.querySelector(".item__dragabblebutton").classList.remove("dragging__button");
 
-  let frompoint = document.elementFromPoint(x, clientY);
+  let frompoint = document.elementFromPoint(x + 8, y);
+  let isInvalid = false;
 
-  if (frompoint == null || frompoint.classList[0] != "item") {
-    if (frompoint.parentElement.classList[0] == "item") {
+  if (frompoint === null) {
+    isInvalid = true;
+  } else {
+    if (frompoint.classList.contains("item")) {
+    } else if (frompoint.parentElement && frompoint.parentElement.classList.contains("item")) {
       frompoint = frompoint.parentElement;
     } else {
-      save = false;
-      console.log("%cNONE FOUND", "padding: 0.5em; background: hsla(0, 100%, 50%, 0.2)");
+      isInvalid = true;
     }
+  }
+
+  if (isInvalid) {
+    console.log("%cNONE FOUND", "padding: 0.5em; background: hsla(0, 100%, 50%, 0.2)");
+    save = false;
   }
 
   let dragabblebuttons = [...list__items.querySelectorAll(".item__dragabblebutton")];
@@ -833,15 +844,30 @@ function EndDragging(item, clientY, pos, animate = true) {
   }, 500);
 }
 
+/* Dragging test */
+window.addEventListener("dragover", (e) => {
+  let target = e.target;
+  if (target == null || target.classList[0] != "item") {
+    if (target.parentElement.classList[0] == "item") {
+      target = target.parentElement;
+    }
+  }
+
+  // if (target.dataset.id != currentPreviewItem.dataset.id) {
+  //   Dragging(currentPreviewItem, e.clientY);
+  //   return;
+  // }
+  Dragging(currentPreviewItem, e.clientY);
+});
+
 /* Dragging item Mobile */
 function BodyTouchmove(e) {
   // console.log("BodyTouchmove", e);
   let touches = e.touches[0] || e.changedTouches[0];
 
   const item = touches.target.parentElement;
-  const pos = Number(item.dataset.id);
 
-  Dragging(item, touches.clientY, pos);
+  Dragging(item, touches.clientY);
 }
 
 function BodyTouchend(e) {

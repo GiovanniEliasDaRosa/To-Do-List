@@ -74,6 +74,7 @@
   /* Config Current List */
   --lists-sidebar-bg-gradient: linear-gradient(0deg, #232c48, #4b5883);
   --lists-sidebar-dark: rgba(0, 0, 0, 0.5);
+  --hint-color: hsl(0, 0%, 80%);
 
   /* Screens */
   --screens-bg-color-dark: hsla(0, 0%, 0%, 0.4);
@@ -186,6 +187,7 @@
   /* Config Current List */
   --lists-sidebar-bg-gradient: linear-gradient(0deg, #a7bbee, #e0e5f4);
   --lists-sidebar-dark: rgba(0, 0, 0, 0.5);
+  --hint-color: hsl(0, 0%, 28%);
 
   /* Screens */
   --screens-bg-color-dark: hsla(0, 0%, 0%, 0.4);
